@@ -220,4 +220,6 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: \
  /usr/include/SFML/Graphics/Glsl.hpp /usr/include/SFML/Graphics/Glsl.inl \
  /usr/include/SFML/Graphics/Sprite.hpp \
  /usr/include/SFML/Graphics/Text.hpp \
- /usr/include/SFML/Graphics/VertexBuffer.hpp
+ /usr/include/SFML/Graphics/VertexBuffer.hpp \
+ /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/RenderObjects.hpp \
+ /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/StructsClassesEnums.hpp

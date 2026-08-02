@@ -1,9 +1,15 @@
 #include <SFML/Graphics.hpp>
+#include "RenderObjects.hpp"
 
 using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Event;
 using sf::Color;
+
+void GameLoop(RenderWindow& window)
+{
+    DrawScreenGrid(window);
+}
 
 int main()
 {
@@ -20,6 +26,7 @@ int main()
             }
         }
         window.clear(Color::Black);
+        GameLoop(window);
         window.display();
     }
 
