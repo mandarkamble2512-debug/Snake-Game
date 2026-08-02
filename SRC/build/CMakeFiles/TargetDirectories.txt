@@ -1,0 +1,3 @@
+/home/mandar/Documents/full projects/C++/Snake Game/SRC/build/CMakeFiles/Swift-Snake.dir
+/home/mandar/Documents/full projects/C++/Snake Game/SRC/build/CMakeFiles/edit_cache.dir
+/home/mandar/Documents/full projects/C++/Snake Game/SRC/build/CMakeFiles/rebuild_cache.dir
