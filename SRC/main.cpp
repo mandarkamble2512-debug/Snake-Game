@@ -7,7 +7,7 @@ using sf::Color;
 
 int main()
 {
-    RenderWindow window(VideoMode(800, 600), "SFML Allman Boilerplate");
+    RenderWindow window(VideoMode(800, 600), "Swift Snake");
 
     while (window.isOpen())
     {
