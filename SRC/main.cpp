@@ -14,7 +14,7 @@ void GameLoop(RenderWindow& window)
 int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
-
+    Snake snake;
     while (window.isOpen())
     {
         Event event;
@@ -29,6 +29,5 @@ int main()
         GameLoop(window);
         window.display();
     }
-
     return 0;
 }

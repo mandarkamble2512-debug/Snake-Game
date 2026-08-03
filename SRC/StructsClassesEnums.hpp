@@ -29,3 +29,15 @@ struct DarkGreenSqure
     }
 };
 
+struct Snake
+{
+    RectangleShape ProtoTypeSnake;
+    
+    Snake ()
+    {
+        ProtoTypeSnake.setSize(Vector2f(32,32));
+        ProtoTypeSnake.setFillColor(Color(72, 118, 236));
+        ProtoTypeSnake.setPosition(Vector2f(0, 0));
+    }
+};
+
