@@ -4,6 +4,7 @@
 CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/main.cpp \
   /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/RenderObjects.hpp \
   /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/StructsClassesEnums.hpp \
+  /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/logic.hpp \
   /usr/include/SFML/Config.hpp \
   /usr/include/SFML/Graphics.hpp \
   /usr/include/SFML/Graphics/BlendMode.hpp \
@@ -179,6 +180,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/c++/15/bits/hash_bytes.h \
   /usr/include/c++/15/bits/invoke.h \
   /usr/include/c++/15/bits/ios_base.h \
+  /usr/include/c++/15/bits/istream.tcc \
   /usr/include/c++/15/bits/locale_classes.h \
   /usr/include/c++/15/bits/locale_classes.tcc \
   /usr/include/c++/15/bits/locale_conv.h \
@@ -252,6 +254,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/c++/15/initializer_list \
   /usr/include/c++/15/ios \
   /usr/include/c++/15/iosfwd \
+  /usr/include/c++/15/iostream \
+  /usr/include/c++/15/istream \
   /usr/include/c++/15/iterator \
   /usr/include/c++/15/locale \
   /usr/include/c++/15/map \
@@ -445,8 +449,6 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_inline.h:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h:
-
 /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h:
@@ -469,7 +471,13 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/pstl/pstl_config.h:
 
-/usr/include/bits/stdio_lim.h:
+/usr/include/c++/15/pstl/execution_defs.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/c++/15/new:
+
+/usr/include/c++/15/map:
 
 /usr/include/bits/types/__locale_t.h:
 
@@ -497,6 +505,10 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/bits/libc-header-start.h:
 
+/usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h:
+
+/usr/include/c++/15/istream:
+
 /usr/include/SFML/Graphics/PrimitiveType.hpp:
 
 /usr/include/bits/byteswap.h:
@@ -505,11 +517,11 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/SFML/Window/Keyboard.hpp:
 
+/usr/include/bits/stdio_lim.h:
+
 /usr/include/bits/time.h:
 
 /usr/include/asm/posix_types.h:
-
-/usr/include/SFML/Graphics/Transform.hpp:
 
 /usr/lib64/libpng16.so.16:
 
@@ -587,11 +599,9 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/bits/refwrap.h:
 
+/usr/include/bits/locale.h:
+
 /usr/include/SFML/Graphics/Texture.hpp:
-
-/usr/include/linux/errno.h:
-
-/usr/include/c++/15/new:
 
 /usr/lib64/libXrender.so.1:
 
@@ -600,8 +610,6 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 /usr/include/SFML/System/String.inl:
 
 /usr/include/c++/15/bits/basic_string.h:
-
-/usr/include/bits/locale.h:
 
 /usr/include/SFML/Graphics/Sprite.hpp:
 
@@ -653,6 +661,12 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/SFML/System/Err.hpp:
 
+/usr/include/SFML/System/Vector3.hpp:
+
+/usr/include/c++/15/bits/stl_algobase.h:
+
+/usr/include/c++/15/clocale:
+
 /usr/include/features.h:
 
 /usr/include/bits/sched.h:
@@ -670,6 +684,16 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/SFML/Window/WindowHandle.hpp:
 
 /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/StructsClassesEnums.hpp:
+
+/usr/include/bits/pthread_stack_min-dynamic.h:
+
+/usr/include/SFML/Graphics/Glsl.hpp:
+
+/usr/include/SFML/Graphics/RectangleShape.hpp:
+
+/usr/include/bits/types/time_t.h:
+
+/usr/include/c++/15/iterator:
 
 /usr/include/c++/15/type_traits:
 
@@ -695,17 +719,13 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/bits/types/clock_t.h:
 
+/usr/include/SFML/Graphics/Transform.hpp:
+
+/home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/logic.hpp:
+
+/usr/include/c++/15/ext/string_conversions.h:
+
 /usr/include/SFML/Graphics/ConvexShape.hpp:
-
-/usr/include/SFML/Graphics/RectangleShape.hpp:
-
-/usr/include/bits/types/time_t.h:
-
-/usr/include/c++/15/iterator:
-
-/usr/include/bits/pthread_stack_min-dynamic.h:
-
-/usr/include/SFML/Graphics/Glsl.hpp:
 
 /usr/lib64/libXfixes.so.3:
 
@@ -738,12 +758,6 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/SFML/System/Utf.inl:
 
 /usr/include/SFML/Graphics/VertexArray.hpp:
-
-/usr/include/SFML/System/Vector3.hpp:
-
-/usr/include/c++/15/bits/stl_algobase.h:
-
-/usr/include/c++/15/clocale:
 
 /usr/include/asm-generic/errno.h:
 
@@ -786,6 +800,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/SFML/Window/Window.hpp:
 
 /usr/include/SFML/Graphics/Shader.hpp:
+
+/usr/include/c++/15/bits/istream.tcc:
 
 /usr/include/bits/types/sigset_t.h:
 
@@ -893,7 +909,13 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/c++/15/bits/cxxabi_forced.h:
 
-/usr/include/c++/15/map:
+/usr/include/c++/15/ostream:
+
+/usr/include/SFML/Graphics/Transformable.hpp:
+
+/usr/include/SFML/Graphics/View.hpp:
+
+/usr/include/c++/15/bits/exception.h:
 
 /usr/lib64/libsfml-window.so.2.6.2:
 
@@ -1029,6 +1051,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/c++/15/bits/uniform_int_dist.h:
 
+/usr/include/c++/15/iostream:
+
 /usr/include/c++/15/bits/vector.tcc:
 
 /usr/include/c++/15/concepts:
@@ -1043,16 +1067,4 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/c++/15/ext/alloc_traits.h:
 
-/usr/include/c++/15/ext/string_conversions.h:
-
 /usr/include/c++/15/iosfwd:
-
-/usr/include/SFML/Graphics/Transformable.hpp:
-
-/usr/include/SFML/Graphics/View.hpp:
-
-/usr/include/c++/15/bits/exception.h:
-
-/usr/include/c++/15/ostream:
-
-/usr/include/c++/15/pstl/execution_defs.h:

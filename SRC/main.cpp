@@ -1,20 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include "RenderObjects.hpp"
+#include "logic.hpp"
 
 using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Event;
 using sf::Color;
 
-void GameLoop(RenderWindow& window)
+void GameLoop(RenderWindow& window, short& CurrentDirectionSnakeIsGoing, Snake& snake)
 {
     DrawScreenGrid(window);
+    MoveSnake(snake, CurrentDirectionSnakeIsGoing);
+    window.draw(snake.ProtoTypeSnake);
 }
 
 int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
+    
     Snake snake;
+
+    short CurrentDirectionSnakeIsGoing = 0; 
+    /*
+        0 denotes towards X
+        1 denotes towards -Y
+        2 denotes towards -X
+        3 denotes towards Y
+    */
+
     while (window.isOpen())
     {
         Event event;
@@ -26,7 +39,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window);
+        GameLoop(window, CurrentDirectionSnakeIsGoing, snake);
         window.display();
     }
     return 0;

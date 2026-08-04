@@ -5,6 +5,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o
  /home/mandar/Documents/full projects/C++/Snake Game/SRC/main.cpp
  /home/mandar/Documents/full projects/C++/Snake Game/SRC/RenderObjects.hpp
  /home/mandar/Documents/full projects/C++/Snake Game/SRC/StructsClassesEnums.hpp
+ /home/mandar/Documents/full projects/C++/Snake Game/SRC/logic.hpp
  /usr/include/SFML/Config.hpp
  /usr/include/SFML/Graphics.hpp
  /usr/include/SFML/Graphics/BlendMode.hpp
@@ -180,6 +181,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o
  /usr/include/c++/15/bits/hash_bytes.h
  /usr/include/c++/15/bits/invoke.h
  /usr/include/c++/15/bits/ios_base.h
+ /usr/include/c++/15/bits/istream.tcc
  /usr/include/c++/15/bits/locale_classes.h
  /usr/include/c++/15/bits/locale_classes.tcc
  /usr/include/c++/15/bits/locale_conv.h
@@ -253,6 +255,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o
  /usr/include/c++/15/initializer_list
  /usr/include/c++/15/ios
  /usr/include/c++/15/iosfwd
+ /usr/include/c++/15/iostream
+ /usr/include/c++/15/istream
  /usr/include/c++/15/iterator
  /usr/include/c++/15/locale
  /usr/include/c++/15/map

@@ -222,4 +222,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: \
  /usr/include/SFML/Graphics/Text.hpp \
  /usr/include/SFML/Graphics/VertexBuffer.hpp \
  /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/RenderObjects.hpp \
- /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/StructsClassesEnums.hpp
+ /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/StructsClassesEnums.hpp \
+ /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/logic.hpp \
+ /usr/include/c++/15/iostream /usr/include/c++/15/istream \
+ /usr/include/c++/15/bits/istream.tcc
