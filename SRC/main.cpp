@@ -7,10 +7,10 @@ using sf::VideoMode;
 using sf::Event;
 using sf::Color;
 
-void GameLoop(RenderWindow& window, short& CurrentDirectionSnakeIsGoing, Snake& snake)
+void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake)
 {
     DrawScreenGrid(window);
-    MoveSnake(snake, CurrentDirectionSnakeIsGoing);
+    MoveSnake(event , snake, CurrentDirectionSnakeIsGoing);
     window.draw(snake.ProtoTypeSnake);
 }
 
@@ -39,7 +39,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, CurrentDirectionSnakeIsGoing, snake);
+        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake);
         window.display();
     }
     return 0;
