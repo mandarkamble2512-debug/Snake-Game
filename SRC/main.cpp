@@ -17,7 +17,6 @@ void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsG
 int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
-    
     Snake snake;
 
     short CurrentDirectionSnakeIsGoing = 0; 

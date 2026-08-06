@@ -11,7 +11,7 @@ using std::chrono::milliseconds;
 
 void Sleep()
 {
-    sleep_for(milliseconds(500));
+    sleep_for(milliseconds(250));
 }
 
 bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
@@ -66,7 +66,6 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection)
         break;
     }
 
-    // Boundary Checks (Keep inside 0 to 608 so a 32x32 block stays on screen)
     if (Pos.x >= 640) Pos.x = 608;
     if (Pos.x < 0)    Pos.x = 0;
     if (Pos.y >= 640) Pos.y = 608;
