@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "RenderObjects.hpp"
 #include "logic.hpp"
 
@@ -6,6 +7,7 @@ using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Event;
 using sf::Color;
+using std::vector;
 
 void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake)
 {
@@ -18,7 +20,7 @@ int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
-
+    short CurrentSnakelenth = 1;
     short CurrentDirectionSnakeIsGoing = 0; 
     /*
         0 denotes towards X
