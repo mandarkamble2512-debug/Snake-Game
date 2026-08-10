@@ -7,21 +7,24 @@ using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Event;
 using sf::Color;
-using std::vector;
+using sf::Clock;
+using sf::Time;
 
-void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake)
+void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake, Clock clock, Time LastTime)
 {
     DrawScreenGrid(window);
-    MoveSnake(event , snake, CurrentDirectionSnakeIsGoing);
-    window.draw(snake.ProtoTypeSnake);
+    MoveSnake(event , snake, CurrentDirectionSnakeIsGoing, clock, LastTime);
+    snake.DrawSnake(window);
 }
 
 int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
+    Clock clock;
+    Time LastTime = clock.getElapsedTime();
     short CurrentSnakelenth = 1;
-    short CurrentDirectionSnakeIsGoing = 0; 
+    short CurrentDirectionSnakeIsGoing = 0;
     /*
         0 denotes towards X
         1 denotes towards -Y
@@ -40,7 +43,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake);
+        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake, clock, LastTime);
         window.display();
     }
     return 0;

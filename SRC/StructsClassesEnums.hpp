@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
 
+using sf::RenderWindow;
 using sf::RectangleShape;
 using sf::Vector2f;
 using sf::Color;
@@ -32,7 +34,7 @@ struct DarkGreenSqure
 struct Snake
 {
     RectangleShape ProtoTypeSnake;
-    vector<Vector2f> CurrentSnakeFormation;
+    // vector<Vector2f> CurrentSnakeFormation[];
 
     Snake ()
     {
@@ -40,7 +42,7 @@ struct Snake
         ProtoTypeSnake.setFillColor(Color(72, 118, 236));
         ProtoTypeSnake.setPosition(Vector2f(0, 0));
     }
-
+    
     void DrawSnake(RenderWindow& window)
     {
         window.draw(ProtoTypeSnake);

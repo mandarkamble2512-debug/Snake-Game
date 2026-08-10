@@ -6,19 +6,25 @@
 using sf::Vector2f;
 using sf::Keyboard;
 using sf::Event;
-using std::this_thread::sleep_for;
-using std::chrono::milliseconds;
+using sf::Clock;
+using sf::Time;
+using sf::seconds;
 
-void Sleep()
+bool IsOneSeconedPassed (Clock& clock, Time& LastTime)
 {
-    sleep_for(milliseconds(250));
+    Time TimeToNextInput = LastTime + seconds(1.0f);
+    if (clock.getElapsedTime() >= TimeToNextInput)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
 {
     if (event.type == Event::KeyPressed)
     {
-        if (event.key.code == TargetKey)
+        if (Keyboard::isKeyPressed(TargetKey))
         {
             return true;
         }
@@ -26,7 +32,7 @@ bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
     return false;
 }
 
-void MoveSnake (Event& event,Snake& snake, short& CurrentDirection)
+void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime)
 {
     Vector2f Pos = snake.ProtoTypeSnake.getPosition();
 
@@ -72,6 +78,6 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection)
     if (Pos.y < 0)    Pos.y = 0;
 
     snake.ProtoTypeSnake.setPosition(Pos);
-    Sleep();
+    IsOneSeconedPassed(clock, LastTime);
 }
 
