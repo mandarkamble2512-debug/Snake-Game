@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <thread>
 #include <chrono>
 #include "StructsClassesEnums.hpp"
@@ -9,14 +10,23 @@ using sf::Event;
 using sf::Clock;
 using sf::Time;
 using sf::seconds;
+using std::cout;
 
-bool IsOneSeconedPassed (Clock& clock, Time& LastTime)
+bool HasOneSecondPassed(Time& LastChecked, Clock& clock) 
 {
-    Time TimeToNextInput = LastTime + seconds(1.0f);
-    if (clock.getElapsedTime() >= TimeToNextInput)
+    Time ElapsedTime = clock.getElapsedTime() - LastChecked;
+
+    cout << LastChecked.asSeconds() << "\n";
+    cout << ElapsedTime.asSeconds() << "\n";
+    
+    if (ElapsedTime.asSeconds() >= 1.0f) 
     {
+        LastChecked += ElapsedTime;
+        clock.restart();
+        cout << "True\n";
         return true;
     }
+    cout << "False\n";
     return false;
 }
 
@@ -32,9 +42,10 @@ bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
     return false;
 }
 
-void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime)
+void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& IsOneSecondPassed)
 {
-    Vector2f Pos = snake.ProtoTypeSnake.getPosition();
+    Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
+    Vector2f Pos = PrivousPos;
 
     if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
     {
@@ -76,8 +87,6 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock
     if (Pos.x < 0)    Pos.x = 0;
     if (Pos.y >= 640) Pos.y = 608;
     if (Pos.y < 0)    Pos.y = 0;
-
     snake.ProtoTypeSnake.setPosition(Pos);
-    IsOneSeconedPassed(clock, LastTime);
+    IsOneSecondPassed = HasOneSecondPassed(LastTime, clock);
 }
-

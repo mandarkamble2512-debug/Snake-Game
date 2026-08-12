@@ -181,6 +181,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/c++/15/bits/hash_bytes.h \
   /usr/include/c++/15/bits/invoke.h \
   /usr/include/c++/15/bits/ios_base.h \
+  /usr/include/c++/15/bits/istream.tcc \
   /usr/include/c++/15/bits/locale_classes.h \
   /usr/include/c++/15/bits/locale_classes.tcc \
   /usr/include/c++/15/bits/locale_conv.h \
@@ -260,6 +261,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/c++/15/initializer_list \
   /usr/include/c++/15/ios \
   /usr/include/c++/15/iosfwd \
+  /usr/include/c++/15/iostream \
+  /usr/include/c++/15/istream \
   /usr/include/c++/15/iterator \
   /usr/include/c++/15/limits \
   /usr/include/c++/15/locale \
@@ -456,8 +459,6 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_inline.h:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h:
-
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h:
@@ -496,9 +497,17 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/iterator:
 
+/usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h:
+
+/usr/include/c++/15/istream:
+
 /usr/include/c++/15/iosfwd:
 
 /usr/include/c++/15/ios:
+
+/usr/lib64/libsfml-window.so.2.6.2:
+
+/usr/include/c++/15/initializer_list:
 
 /usr/include/bits/types/__locale_t.h:
 
@@ -820,6 +829,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/SFML/Graphics/Shader.hpp:
 
+/usr/include/c++/15/bits/istream.tcc:
+
 /usr/include/bits/types/sigset_t.h:
 
 /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/main.cpp:
@@ -931,10 +942,6 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/SFML/Graphics/View.hpp:
 
 /usr/include/c++/15/bits/exception.h:
-
-/usr/lib64/libsfml-window.so.2.6.2:
-
-/usr/include/c++/15/initializer_list:
 
 /usr/include/sys/single_threaded.h:
 
@@ -1071,6 +1078,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/c++/15/bits/this_thread_sleep.h:
 
 /usr/include/c++/15/bits/uniform_int_dist.h:
+
+/usr/include/c++/15/iostream:
 
 /usr/include/c++/15/bits/vector.tcc:
 
