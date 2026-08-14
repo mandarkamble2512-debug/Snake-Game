@@ -10,18 +10,19 @@ using sf::Event;
 using sf::Clock;
 using sf::Time;
 using sf::seconds;
+using sf::milliseconds;
 using std::cout;
 
-bool HasOneSecondPassed(Time& LastChecked, Clock& clock) 
+bool HasOneSecondPassed(Time& LastChecked, Clock& clock, Time& NextMovementTime) 
 {
-    Time ElapsedTime = clock.getElapsedTime() - LastChecked;
-
-    cout << LastChecked.asSeconds() << "\n";
-    cout << ElapsedTime.asSeconds() << "\n";
+    Time TimeNow = clock.getElapsedTime();
+    cout << "LastChecked: " << LastChecked.asSeconds() << "\n";
+    cout << "NextMovementTime: " << NextMovementTime.asSeconds() << "\n";
     
-    if (ElapsedTime.asSeconds() >= 1.0f) 
+    if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
     {
-        LastChecked += ElapsedTime;
+        LastChecked = NextMovementTime;
+        // NextMovementTime = clock.getElapsedTime() + seconds(1);
         clock.restart();
         cout << "True\n";
         return true;
@@ -42,7 +43,7 @@ bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
     return false;
 }
 
-void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& IsOneSecondPassed)
+void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& IsOneSecondPassed, Time NextMovementTime)
 {
     Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
     Vector2f Pos = PrivousPos;
@@ -88,5 +89,10 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock
     if (Pos.y >= 640) Pos.y = 608;
     if (Pos.y < 0)    Pos.y = 0;
     snake.ProtoTypeSnake.setPosition(Pos);
-    IsOneSecondPassed = HasOneSecondPassed(LastTime, clock);
+    IsOneSecondPassed = HasOneSecondPassed(LastTime, clock, NextMovementTime);
+    if (!IsOneSecondPassed)
+    {
+        snake.ProtoTypeSnake.setPosition(PrivousPos);
+    }
+    
 }
