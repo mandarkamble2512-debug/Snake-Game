@@ -15,19 +15,14 @@ using std::cout;
 
 bool HasOneSecondPassed(Time& LastChecked, Clock& clock, Time& NextMovementTime) 
 {
-    Time TimeNow = clock.getElapsedTime();
-    cout << "LastChecked: " << LastChecked.asSeconds() << "\n";
-    cout << "NextMovementTime: " << NextMovementTime.asSeconds() << "\n";
-    
+    Time TimeNow = clock.getElapsedTime();    
     if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
     {
         LastChecked = NextMovementTime;
         // NextMovementTime = clock.getElapsedTime() + seconds(1);
         clock.restart();
-        cout << "True\n";
         return true;
     }
-    cout << "False\n";
     return false;
 }
 
