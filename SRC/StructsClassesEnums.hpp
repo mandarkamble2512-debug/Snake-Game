@@ -57,5 +57,10 @@ struct Snake
     {
         
     }
+
+    void ChangeSprite (short IndexNumberOfSprite)
+    {
+        
+    }
 };
 
