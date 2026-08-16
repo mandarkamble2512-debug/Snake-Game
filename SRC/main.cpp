@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include "RenderObjects.hpp"
 #include "logic.hpp"
 
@@ -12,10 +11,10 @@ using sf::Time;
 using sf::seconds;
 using sf::milliseconds;
 
-void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake, Clock& clock, Time& LastTime, bool& IsOneSecondPassed, Time& NextMovementTime)
+void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time& NextMovementTime)
 {
     DrawScreenGrid(window);
-    MoveSnake(event, snake, CurrentDirectionSnakeIsGoing, clock, LastTime, IsOneSecondPassed, NextMovementTime);
+    MoveSnake(event, snake, CurrentDirectionSnakeIsGoing, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
     snake.DrawSnake(window);
 }
 
@@ -35,7 +34,7 @@ int main()
         2 denotes towards -X
         3 denotes towards Y
     */
-   bool IsOneSecondPassed = 0;
+   bool Is250MiliSecondPassed = 0;
 
     while (window.isOpen())
     {
@@ -48,7 +47,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake, clock, LastTime, IsOneSecondPassed, NextMovementTime);
+        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
         window.display();
     }
     return 0;

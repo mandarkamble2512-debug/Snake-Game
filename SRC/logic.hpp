@@ -1,7 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <thread>
-#include <chrono>
 #include "StructsClassesEnums.hpp"
 
 using sf::Vector2f;
@@ -13,7 +11,7 @@ using sf::seconds;
 using sf::milliseconds;
 using std::cout;
 
-bool HasOneSecondPassed(Time& LastChecked, Clock& clock, Time& NextMovementTime) 
+bool Has250MiliscondsPassed(Time& LastChecked, Clock& clock, Time& NextMovementTime) 
 {
     Time TimeNow = clock.getElapsedTime();    
     if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
@@ -38,11 +36,8 @@ bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
     return false;
 }
 
-void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& IsOneSecondPassed, Time NextMovementTime)
+short DirectionChanger (Event& event, short CurrentDirection)
 {
-    Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
-    Vector2f Pos = PrivousPos;
-
     if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
     {
         CurrentDirection = 1;
@@ -59,6 +54,15 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock
     {
         CurrentDirection = 0;
     }
+    return CurrentDirection;
+}
+
+void MoveSnake (Event& event, Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time NextMovementTime)
+{
+    Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
+    Vector2f Pos = PrivousPos;
+
+    CurrentDirection = DirectionChanger(event, CurrentDirection);
 
     switch (CurrentDirection)
     {
@@ -83,11 +87,12 @@ void MoveSnake (Event& event,Snake& snake, short& CurrentDirection, Clock& clock
     if (Pos.x < 0)    Pos.x = 0;
     if (Pos.y >= 640) Pos.y = 608;
     if (Pos.y < 0)    Pos.y = 0;
+
     snake.ProtoTypeSnake.setPosition(Pos);
-    IsOneSecondPassed = HasOneSecondPassed(LastTime, clock, NextMovementTime);
-    if (!IsOneSecondPassed)
+    Is250MiliSecondPassed = Has250MiliscondsPassed(LastTime, clock, NextMovementTime);
+
+    if (!Is250MiliSecondPassed)
     {
         snake.ProtoTypeSnake.setPosition(PrivousPos);
     }
-    
 }

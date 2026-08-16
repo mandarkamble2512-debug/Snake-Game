@@ -6,6 +6,7 @@ using sf::RenderWindow;
 using sf::RectangleShape;
 using sf::Vector2f;
 using sf::Color;
+using std::vector;
 
 struct LightGreenSqure
 {
@@ -34,7 +35,7 @@ struct DarkGreenSqure
 struct Snake
 {
     RectangleShape ProtoTypeSnake;
-    // vector<Vector2f> CurrentSnakeFormation[];
+    vector<Vector2f> CurrentSnakeFormation;
 
     Snake ()
     {
@@ -45,7 +46,16 @@ struct Snake
     
     void DrawSnake(RenderWindow& window)
     {
-        window.draw(ProtoTypeSnake);
+        for (Vector2f& pos : CurrentSnakeFormation)
+        {
+            ProtoTypeSnake.setPosition(pos);
+            window.draw(ProtoTypeSnake);
+        }    
+    }
+
+    void AddToSnakeLenth (short Lenth)
+    {
+        
     }
 };
 
