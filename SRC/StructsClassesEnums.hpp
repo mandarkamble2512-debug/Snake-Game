@@ -1,12 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
 #include <vector>
+#include <filesystem>
+
 
 using sf::RenderWindow;
 using sf::RectangleShape;
 using sf::Vector2f;
 using sf::Color;
+using sf::Texture;
+using std::cout;
 using std::vector;
+using std::string;
+using std::move;
+using std::filesystem::exists;
+using std::filesystem::is_directory;
+using std::filesystem::directory_iterator;
 
 struct LightGreenSqure
 {
@@ -34,8 +45,10 @@ struct DarkGreenSqure
 
 struct Snake
 {
+    bool HasSnakeHeadLeavingTexturesLoaded = false;
     RectangleShape ProtoTypeSnake;
     vector<Vector2f> CurrentSnakeFormation;
+    vector<Texture> SnakeTextureOfSnakeHeadLeaving;
 
     Snake ()
     {
@@ -46,21 +59,48 @@ struct Snake
     
     void DrawSnake(RenderWindow& window)
     {
-        for (Vector2f& pos : CurrentSnakeFormation)
+        // for (Vector2f& pos : CurrentSnakeFormation)
+        // {
+        //     ProtoTypeSnake.setPosition(pos);
+        //     window.draw(ProtoTypeSnake);
+        // }    
+        window.draw(ProtoTypeSnake);
+    }
+
+    void LoadTextureFromDiskOfSnakeHeadLeavingAnimation ()
+    {
+        if (!HasSnakeHeadLeavingTexturesLoaded)
         {
-            ProtoTypeSnake.setPosition(pos);
-            window.draw(ProtoTypeSnake);
-        }    
-    }
+            string FolderPath = "./Assets/Animation/Snake-Head-Leaving-Box"; // ./Assets/Animation/Snake-Head-Leaving-Box
+            string FileExtention;
+            Texture texture;
+            short NumberOfTextureLoaded = 0;
 
-    void AddToSnakeLenth (short Lenth)
-    {
-        
-    }
+            if (!exists(FolderPath) || !is_directory(FolderPath))
+            {
+                cout << "Path " << FolderPath << "Does Not Exist" << "\n";
+                return;
+            }
+            
+            for (auto File : directory_iterator(FolderPath))
+            {
+                if (File.is_regular_file())
+                {
+                    FileExtention = File.path().extension().string();
+                }
+                
+                if (texture.loadFromFile(File.path().string()))
+                {
+                    SnakeTextureOfSnakeHeadLeaving.push_back(move(texture));
+                }
+                NumberOfTextureLoaded++;
 
-    void ChangeSprite (short IndexNumberOfSprite)
-    {
-        
+                if (NumberOfTextureLoaded == 16)
+                {
+                    HasSnakeHeadLeavingTexturesLoaded = true;
+                }
+            }
+        }
     }
 };
 
