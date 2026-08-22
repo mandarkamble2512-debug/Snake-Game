@@ -46,6 +46,7 @@ struct DarkGreenSqure
 struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
+    short CurrentTextureIndex = 0;
     RectangleShape ProtoTypeSnake;
     vector<Vector2f> CurrentSnakeFormation;
     vector<Texture> SnakeTextureOfSnakeHeadLeaving;
@@ -101,6 +102,11 @@ struct Snake
                 }
             }
         }
+    }
+
+    void ChangeTextureOfSnake ()
+    {
+
     }
 };
 
