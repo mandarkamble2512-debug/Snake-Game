@@ -95,4 +95,4 @@ void MoveSnake (Event& event, Snake& snake, short& CurrentDirection, Clock& cloc
     {
         snake.ProtoTypeSnake.setPosition(PrivousPos);
     }
-}
+} 

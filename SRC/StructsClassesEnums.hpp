@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <array>
 
 
 using sf::RenderWindow;
@@ -14,6 +15,7 @@ using sf::Texture;
 using std::cout;
 using std::vector;
 using std::string;
+using std::array;
 using std::move;
 using std::filesystem::exists;
 using std::filesystem::is_directory;
@@ -49,7 +51,7 @@ struct Snake
     short CurrentTextureIndex = 0;
     RectangleShape ProtoTypeSnake;
     vector<Vector2f> CurrentSnakeFormation;
-    vector<Texture> SnakeTextureOfSnakeHeadLeaving;
+    array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
 
     Snake ()
     {
@@ -72,41 +74,47 @@ struct Snake
     {
         if (!HasSnakeHeadLeavingTexturesLoaded)
         {
-            string FolderPath = "./Assets/Animation/Snake-Head-Leaving-Box"; // ./Assets/Animation/Snake-Head-Leaving-Box
-            string FileExtention;
-            Texture texture;
-            short NumberOfTextureLoaded = 0;
-
-            if (!exists(FolderPath) || !is_directory(FolderPath))
+            string SpriteLocation[16] = 
             {
-                cout << "Path " << FolderPath << "Does Not Exist" << "\n";
-                return;
-            }
-            
-            for (auto File : directory_iterator(FolderPath))
-            {
-                if (File.is_regular_file())
-                {
-                    FileExtention = File.path().extension().string();
-                }
-                
-                if (texture.loadFromFile(File.path().string()))
-                {
-                    SnakeTextureOfSnakeHeadLeaving.push_back(move(texture));
-                }
-                NumberOfTextureLoaded++;
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-0.png", 
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-2.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-3.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-4.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-5.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-6.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-7.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-8.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-9.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-10.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-11.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-12.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-13.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-14.png",
+                "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-15.png",
+            }; // ./Assets/Animation/Snake-Head-Leaving-Box
+            Texture TempTexture;
+            short CurrentTextureLodedNumber = 0;
 
-                if (NumberOfTextureLoaded == 16)
+            while (CurrentTextureLodedNumber < 15)
+            {
+                if (!TempTexture.loadFromFile(SpriteLocation[CurrentTextureLodedNumber]))
                 {
-                    HasSnakeHeadLeavingTexturesLoaded = true;
+                    cout << SpriteLocation[CurrentTextureLodedNumber] << " Cannot be loded properly \n";    
+                }
+                else
+                {
+                    cout << SpriteLocation[CurrentTextureLodedNumber] << " Is loded properly \n";
+                    CurrentTextureLodedNumber++;
                 }
             }
-        }
+
+            HasSnakeHeadLeavingTexturesLoaded = true;
+        }   
     }
 
     void ChangeTextureOfSnake ()
     {
-
+        
     }
 };
 

@@ -236,5 +236,6 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: \
  /usr/include/c++/15/bits/shared_ptr_base.h \
  /usr/include/c++/15/bits/allocated_ptr.h \
  /usr/include/c++/15/bits/unique_ptr.h /usr/include/c++/15/bits/fs_dir.h \
- /usr/include/c++/15/bits/fs_ops.h \
+ /usr/include/c++/15/bits/fs_ops.h /usr/include/c++/15/array \
+ /usr/include/c++/15/compare \
  /home/mandar/Documents/full\ projects/C++/Snake\ Game/SRC/logic.hpp

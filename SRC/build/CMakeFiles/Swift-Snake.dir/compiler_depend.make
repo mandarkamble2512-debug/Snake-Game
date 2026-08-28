@@ -155,6 +155,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/bits/wctype-wchar.h \
   /usr/include/bits/wordsize.h \
   /usr/include/c++/15/algorithm \
+  /usr/include/c++/15/array \
   /usr/include/c++/15/backward/binders.h \
   /usr/include/c++/15/bit \
   /usr/include/c++/15/bits/algorithmfwd.h \
@@ -248,6 +249,7 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o: /home/mandar/Documents/full\ projects/C++
   /usr/include/c++/15/cerrno \
   /usr/include/c++/15/clocale \
   /usr/include/c++/15/codecvt \
+  /usr/include/c++/15/compare \
   /usr/include/c++/15/concepts \
   /usr/include/c++/15/cstddef \
   /usr/include/c++/15/cstdint \
@@ -531,6 +533,8 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 
 /usr/include/c++/15/exception:
 
+/usr/include/c++/15/debug/debug.h:
+
 /usr/include/bits/types/__locale_t.h:
 
 /usr/include/bits/types/__fpos64_t.h:
@@ -620,8 +624,6 @@ Swift-Snake: /lib64/ld-linux-x86-64.so.2 \
 /usr/include/c++/15/backward/binders.h:
 
 /usr/include/SFML/Window/GlResource.hpp:
-
-/usr/include/c++/15/debug/debug.h:
 
 /usr/include/SFML/Window/Export.hpp:
 
@@ -943,6 +945,8 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 
 /usr/include/c++/15/bits/range_access.h:
 
+/usr/include/c++/15/array:
+
 /usr/include/c++/15/bits/algorithmfwd.h:
 
 /usr/include/c++/15/bits/istream.tcc:
@@ -972,10 +976,6 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++locale.h:
 
 /usr/include/c++/15/bits/codecvt.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so:
-
-/usr/include/c++/15/bits/cxxabi_forced.h:
 
 /usr/include/c++/15/ostream:
 
@@ -1062,6 +1062,12 @@ CMakeFiles/Swift-Snake.dir/main.cpp.o:
 /usr/include/c++/15/bits/std_abs.h:
 
 /usr/include/c++/15/bits/stl_algo.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so:
+
+/usr/include/c++/15/bits/cxxabi_forced.h:
+
+/usr/include/c++/15/compare:
 
 /usr/include/SFML/Graphics.hpp:
 

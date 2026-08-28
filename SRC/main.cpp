@@ -17,7 +17,7 @@ void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsG
     MoveSnake(event, snake, CurrentDirectionSnakeIsGoing, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
     snake.LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
     snake.DrawSnake(window);
-    // window.draw(snake.ProtoTypeSnake);
+    // window.draw(snake.ProtoTypeSnake); 
 }
 
 int main()
