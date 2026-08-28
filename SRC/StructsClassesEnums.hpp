@@ -5,6 +5,7 @@
 #include <vector>
 #include <filesystem>
 #include <array>
+#include "logic.hpp"
 
 
 using sf::RenderWindow;
@@ -12,6 +13,9 @@ using sf::RectangleShape;
 using sf::Vector2f;
 using sf::Color;
 using sf::Texture;
+using sf::Event;
+using sf::Clock;
+using sf::Time;
 using std::cout;
 using std::vector;
 using std::string;
@@ -49,6 +53,14 @@ struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
     short CurrentTextureIndex = 0;
+    short CurrentSnakelenth = 1;
+    short CurrentDirectionSnakeIsGoing = 0;
+    /*
+    0 denotes towards X
+    1 denotes towards -Y
+    2 denotes towards -X
+    3 denotes towards Y
+    */
     RectangleShape ProtoTypeSnake;
     vector<Vector2f> CurrentSnakeFormation;
     array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
@@ -201,6 +213,44 @@ struct Snake
         }
     }
 
-    
+    void MoveSnake (Event& event, Snake& snake, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time NextMovementTime)
+    {
+        Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
+        Vector2f Pos = PrivousPos;
+
+        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing);
+
+        switch (CurrentDirectionSnakeIsGoing)
+        {
+        case 0:
+            Pos.x += 32;
+            break;
+        
+        case 1:
+            Pos.y -= 32;
+            break;
+
+        case 2:
+            Pos.x -= 32;
+            break;
+
+        case 3:
+            Pos.y += 32;
+            break;
+        }
+
+        if (Pos.x >= 640) Pos.x = 608;
+        if (Pos.x < 0)    Pos.x = 0;
+        if (Pos.y >= 640) Pos.y = 608;
+        if (Pos.y < 0)    Pos.y = 0;
+
+        snake.ProtoTypeSnake.setPosition(Pos);
+        Is250MiliSecondPassed = Has250MiliscondsPassed(LastTime, clock, NextMovementTime);
+
+        if (!Is250MiliSecondPassed)
+        {
+            snake.ProtoTypeSnake.setPosition(PrivousPos);
+        }
+    }
 };
 

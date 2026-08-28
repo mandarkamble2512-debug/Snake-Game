@@ -11,10 +11,10 @@ using sf::Time;
 using sf::seconds;
 using sf::milliseconds;
 
-void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time& NextMovementTime)
+void GameLoop(RenderWindow& window, Event event, Snake& snake, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time& NextMovementTime)
 {
     DrawScreenGrid(window);
-    MoveSnake(event, snake, CurrentDirectionSnakeIsGoing, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
+    snake.MoveSnake(event, snake, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
     snake.LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
     snake.ChangeTextureOfSnake();
     snake.DrawSnake(window);
@@ -29,14 +29,8 @@ int main()
     clock.restart();
     Time LastTime         = seconds(0.0f);
     Time NextMovementTime = milliseconds(250);
-    short CurrentSnakelenth = 1;
-    short CurrentDirectionSnakeIsGoing = 0;
-    /*
-        0 denotes towards X
-        1 denotes towards -Y
-        2 denotes towards -X
-        3 denotes towards Y
-    */
+
+
    bool Is250MiliSecondPassed = 0;
 
     while (window.isOpen())
@@ -50,7 +44,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
+        GameLoop(window, event, snake, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
         window.display();
     }
     return 0;
