@@ -25,6 +25,18 @@ bool Has250MiliscondsPassed(Time& LastChecked, Clock& clock, Time& NextMovementT
     return false;
 }
 
+bool Has15_625MiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovementTime) 
+{
+    Time TimeNow = clock.getElapsedTime();    
+    if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
+    {
+        LastChecked = NextMovementTime;
+        clock.restart();
+        return true;
+    }
+    return false;
+}
+
 bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
 {
     if (event.type == Event::KeyPressed)
