@@ -1,0 +1,7 @@
+language: "en-US"
+reviews:
+  path_filters:
+    - "!**/*.o"
+    - "!**/*.o.d"
+    - "!**/compiler_depend.*"
+    - "!**/CMakeFiles/**"
