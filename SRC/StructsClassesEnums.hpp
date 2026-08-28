@@ -74,7 +74,7 @@ struct Snake
     {
         if (!HasSnakeHeadLeavingTexturesLoaded)
         {
-            string SpriteLocation[16] = 
+            string SpriteLocation[15] = 
             {
                 "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-0.png", 
                 "./Assets/Animation/Snake-Head-Leaving-Box/pixil-frame-2.png",
@@ -95,16 +95,16 @@ struct Snake
             Texture TempTexture;
             short CurrentTextureLodedNumber = 0;
 
-            while (CurrentTextureLodedNumber < 15)
+            for (int i = 0; i < 15; i++)
             {
-                if (!TempTexture.loadFromFile(SpriteLocation[CurrentTextureLodedNumber]))
+                // Store directly into the array member
+                if (!SnakeTextureOfSnakeHeadLeaving[i].loadFromFile(SpriteLocation[i]))
                 {
-                    cout << SpriteLocation[CurrentTextureLodedNumber] << " Cannot be loded properly \n";    
+                    cout << SpriteLocation[i] << " Cannot be loaded properly \n";    
                 }
                 else
                 {
-                    cout << SpriteLocation[CurrentTextureLodedNumber] << " Is loded properly \n";
-                    CurrentTextureLodedNumber++;
+                    cout << SpriteLocation[i] << " Is loaded properly \n";
                 }
             }
 
@@ -114,7 +114,93 @@ struct Snake
 
     void ChangeTextureOfSnake ()
     {
-        
+        switch (CurrentTextureIndex)
+        {
+            case 0:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(1));
+                CurrentTextureIndex++;
+                break;
+            
+            case 1:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(2));
+                CurrentTextureIndex++;
+                break;
+
+            case 2:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(3));
+                CurrentTextureIndex++;
+                break;
+            
+            case 3:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(4));
+                CurrentTextureIndex++;
+                break;
+
+            case 4:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(4));
+                CurrentTextureIndex++;
+                break;
+            
+            case 5:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(6));
+                CurrentTextureIndex++;
+                break;
+
+            case 6:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(7));
+                CurrentTextureIndex++;
+                break;
+
+            case 7:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(8));
+                CurrentTextureIndex++;
+                break;
+
+            case 8:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(9));
+                CurrentTextureIndex++;
+                break;
+
+            case 9:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(10));
+                CurrentTextureIndex++;
+                break;
+            
+            case 10:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(11));
+                CurrentTextureIndex++;
+                break;
+
+            case 11:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(12));
+                CurrentTextureIndex++;
+                break;
+
+            case 12:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(13));
+                CurrentTextureIndex++;
+                break;
+
+            case 13:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(14));
+                CurrentTextureIndex++;
+                break;
+
+            case 14:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(15));
+                CurrentTextureIndex++;
+                break;
+
+            case 15:
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(0));
+                CurrentTextureIndex = 0;
+                break;
+    
+            default:
+                break;
+        }
     }
+
+    
 };
 

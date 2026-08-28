@@ -1,6 +1,2 @@
 # Build outputs and generated files
-*.o
-*.o.d
-compiler_depend.*
-CMakeFiles/
-CMakeCache.txt
+SRC/build
