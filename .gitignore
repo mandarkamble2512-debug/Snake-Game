@@ -1,7 +1,6 @@
-language: "en-US"
-reviews:
-  path_filters:
-    - "!**/*.o"
-    - "!**/*.o.d"
-    - "!**/compiler_depend.*"
-    - "!**/CMakeFiles/**"
+# Build outputs and generated files
+*.o
+*.o.d
+compiler_depend.*
+CMakeFiles/
+CMakeCache.txt
