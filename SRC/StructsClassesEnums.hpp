@@ -109,7 +109,6 @@ struct Snake
 
             for (int i = 0; i < 15; i++)
             {
-                // Store directly into the array member
                 if (!SnakeTextureOfSnakeHeadLeaving[i].loadFromFile(SpriteLocation[i]))
                 {
                     cout << SpriteLocation[i] << " Cannot be loaded properly \n";    
@@ -124,7 +123,7 @@ struct Snake
         }   
     }
 
-    void ChangeTextureOfSnake (Time LastChacked, Clock clock, Time NextFrameTime)
+    void ChangeTextureOfSnake (Time& LastChacked, Clock& clock, Time& NextFrameTime)
     {
         if (Has15_625MiliscondsPassed(LastChacked, clock, NextFrameTime))
         {

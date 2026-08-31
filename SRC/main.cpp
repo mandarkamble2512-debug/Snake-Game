@@ -29,10 +29,11 @@ int main()
     Clock ClockForMovement;
     Clock ClockForAnimation;
     ClockForMovement.restart();
+    ClockForAnimation.restart();
     Time LastTime              = seconds(0.0f);
     Time LastTimeForAnimation  = seconds(0.0f);
-    Time NextMovementTime      = milliseconds(250);
-    Time NextFrameTime         = milliseconds(15.625); 
+    Time NextMovementTime      = milliseconds(250.0f);
+    Time NextFrameTime         = milliseconds(100.0f); //15.625
     bool Is250MiliSecondPassed = 0;
 
     while (window.isOpen())
