@@ -28,14 +28,11 @@ bool Has250MiliscondsPassed(Time& LastChecked, Clock& clock, Time& NextMovementT
 bool Has15_625MiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovementTime) 
 {
     Time TimeNow = clock.getElapsedTime();
-    cout << "TimeNow = " << TimeNow.asMilliseconds() << "\n";
-    cout << "LastChecked = " << LastChecked.asMilliseconds() << "\n"; 
     if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
     {
         LastChecked = NextMovementTime;
         // NextMovementTime += milliseconds(15.625);
         clock.restart();
-        cout << "True\n";
         return true;
     }
     cout << "False\n";
