@@ -35,7 +35,6 @@ bool Has15_625MiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovem
         clock.restart();
         return true;
     }
-    cout << "False\n";
     return false;
 }
 
