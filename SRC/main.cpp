@@ -11,32 +11,30 @@ using sf::Time;
 using sf::seconds;
 using sf::milliseconds;
 
-void GameLoop(RenderWindow& window, Event event, short& CurrentDirectionSnakeIsGoing, Snake& snake, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time& NextMovementTime)
+void GameLoop(RenderWindow& window, Event event, Snake& snake, Clock& ClockForMovement, Clock& ClockForAnimation,Time& LastTime, bool& Is250MiliSecondPassed, Time& NextMovementTime, Time& LastTimeForAnimation, Time& NextFrameTime)
 {
     DrawScreenGrid(window);
-    MoveSnake(event, snake, CurrentDirectionSnakeIsGoing, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
+    snake.MoveSnake(event, snake, ClockForMovement, LastTime, Is250MiliSecondPassed, NextMovementTime);
     snake.LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
+    snake.ChangeTextureOfSnake(LastTime, ClockForAnimation, NextFrameTime);
+    snake.FixSnakeRotation();
     snake.DrawSnake(window);
-    // window.draw(snake.ProtoTypeSnake);
+    // window.draw(snake.ProtoTypeSnake); 
 }
 
 int main()
 {
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
-    Clock clock;
-    clock.restart();
-    Time LastTime         = seconds(0.0f);
-    Time NextMovementTime = milliseconds(250);
-    short CurrentSnakelenth = 1;
-    short CurrentDirectionSnakeIsGoing = 0;
-    /*
-        0 denotes towards X
-        1 denotes towards -Y
-        2 denotes towards -X
-        3 denotes towards Y
-    */
-   bool Is250MiliSecondPassed = 0;
+    Clock ClockForMovement;
+    Clock ClockForAnimation;
+    ClockForMovement.restart();
+    ClockForAnimation.restart();
+    Time LastTime              = seconds(0.0f);
+    Time LastTimeForAnimation  = seconds(0.0f);
+    Time NextMovementTime      = milliseconds(250.0f);
+    Time NextFrameTime         = milliseconds(15.625); //15.625
+    bool Is250MiliSecondPassed = 0;
 
     while (window.isOpen())
     {
@@ -49,7 +47,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event,CurrentDirectionSnakeIsGoing, snake, clock, LastTime, Is250MiliSecondPassed, NextMovementTime);
+        GameLoop(window, event, snake, ClockForMovement, ClockForAnimation, LastTime, Is250MiliSecondPassed, NextMovementTime, LastTimeForAnimation, NextFrameTime);
         window.display();
     }
     return 0;

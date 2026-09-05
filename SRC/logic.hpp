@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "StructsClassesEnums.hpp"
@@ -18,6 +19,19 @@ bool Has250MiliscondsPassed(Time& LastChecked, Clock& clock, Time& NextMovementT
     {
         LastChecked = NextMovementTime;
         // NextMovementTime = clock.getElapsedTime() + seconds(1);
+        clock.restart();
+        return true;
+    }
+    return false;
+}
+
+bool Has15_625MiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovementTime) 
+{
+    Time TimeNow = clock.getElapsedTime();
+    if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
+    {
+        LastChecked = NextMovementTime;
+        // NextMovementTime += milliseconds(15.625);
         clock.restart();
         return true;
     }
@@ -57,42 +71,4 @@ short DirectionChanger (Event& event, short CurrentDirection)
     return CurrentDirection;
 }
 
-void MoveSnake (Event& event, Snake& snake, short& CurrentDirection, Clock& clock, Time& LastTime, bool& Is250MiliSecondPassed, Time NextMovementTime)
-{
-    Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
-    Vector2f Pos = PrivousPos;
-
-    CurrentDirection = DirectionChanger(event, CurrentDirection);
-
-    switch (CurrentDirection)
-    {
-    case 0:
-        Pos.x += 32;
-        break;
-    
-    case 1:
-        Pos.y -= 32;
-        break;
-
-    case 2:
-        Pos.x -= 32;
-        break;
-
-    case 3:
-        Pos.y += 32;
-        break;
-    }
-
-    if (Pos.x >= 640) Pos.x = 608;
-    if (Pos.x < 0)    Pos.x = 0;
-    if (Pos.y >= 640) Pos.y = 608;
-    if (Pos.y < 0)    Pos.y = 0;
-
-    snake.ProtoTypeSnake.setPosition(Pos);
-    Is250MiliSecondPassed = Has250MiliscondsPassed(LastTime, clock, NextMovementTime);
-
-    if (!Is250MiliSecondPassed)
-    {
-        snake.ProtoTypeSnake.setPosition(PrivousPos);
-    }
-}
+ 

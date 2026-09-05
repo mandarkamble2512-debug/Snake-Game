@@ -13,7 +13,7 @@ void DrawScreenGrid (RenderWindow& window)
             if (IsLightGreenTileDrawn)
             {
                 DarkGreenSqure squre(Vector2f(X, Y));
-                window.draw(squre.GreenSqure);
+                window.draw(squre.GreenSqure); 
                 IsLightGreenTileDrawn = false;
             }
             else
