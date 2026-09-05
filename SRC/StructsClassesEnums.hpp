@@ -52,6 +52,7 @@ struct DarkGreenSqure
 struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
+    bool HasSnakeHeadEnteringTextureLoded  = false;
     short CurrentTextureIndex = 0;
     short CurrentSnakelenth = 1;
     short CurrentDirectionSnakeIsGoing = 0;
@@ -64,6 +65,7 @@ struct Snake
     RectangleShape ProtoTypeSnake;
     vector<Vector2f> CurrentSnakeFormation;
     array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
+    array<Texture, 34> SnakeTextureOfSnakeHeadEntering;
 
     Snake ()
     {
@@ -80,6 +82,49 @@ struct Snake
         //     window.draw(ProtoTypeSnake);
         // }    
         window.draw(ProtoTypeSnake);
+    }
+
+    void LoadTextureFromDiskOfSnakeHeadEnteringaAnimation ()
+    {
+        if (!HasSnakeHeadEnteringTextureLoded)
+        {
+            string SpriteLocation[34] = 
+            {
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-0.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-1.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-3.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-4.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-5.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-6.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-7.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-8.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-9.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-10.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-11.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-12.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-13.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-14.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-15.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-16.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-17.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-18.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-19.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-20.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-21.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-22.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-23.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-24.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-25.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-26.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-27.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-28.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-29.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-30.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-31.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-32.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-33.png",
+            }; // ./Assets/Animation/Snake-Head-Entering-Box
+        }
     }
 
     void LoadTextureFromDiskOfSnakeHeadLeavingAnimation ()
@@ -120,10 +165,11 @@ struct Snake
             }
 
             HasSnakeHeadLeavingTexturesLoaded = true;
-        }   
+        }
+        return;
     }
 
-    void ChangeTextureOfSnake (Time& LastChacked, Clock& clock, Time& NextFrameTime)
+    void ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites (Time& LastChacked, Clock& clock, Time& NextFrameTime)
     {
         if (Has15_625MiliscondsPassed(LastChacked, clock, NextFrameTime))
         {
