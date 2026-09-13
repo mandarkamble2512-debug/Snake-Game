@@ -1,42 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "StructsClassesEnums.hpp"
 
 using sf::Vector2f;
 using sf::Keyboard;
 using sf::Event;
 using sf::Clock;
 using sf::Time;
-using sf::seconds;
 using sf::milliseconds;
 using std::cout;
-
-bool Has250MiliscondsPassed(Time& LastChecked, Clock& clock, Time& NextMovementTime) 
-{
-    Time TimeNow = clock.getElapsedTime();    
-    if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
-    {
-        LastChecked = NextMovementTime;
-        // NextMovementTime = clock.getElapsedTime() + seconds(1);
-        clock.restart();
-        return true;
-    }
-    return false;
-}
-
-bool Has15_625MiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovementTime) 
-{
-    Time TimeNow = clock.getElapsedTime();
-    if (NextMovementTime.asMilliseconds() <= TimeNow.asMilliseconds())
-    {
-        LastChecked = NextMovementTime;
-        // NextMovementTime += milliseconds(15.625);
-        clock.restart();
-        return true;
-    }
-    return false;
-}
 
 bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
 {
