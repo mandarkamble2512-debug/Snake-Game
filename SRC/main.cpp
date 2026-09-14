@@ -10,7 +10,7 @@ using sf::Event;
 using sf::Color;
 
 
-void GameLoop(RenderWindow& window, Event event, Snake& snake, bool Is250MiliSecondPassed, GameTime& gameTime)
+void GameLoop(RenderWindow& window, Event& event, Snake& snake, bool& Is250MiliSecondPassed, GameTime& gameTime)
 {
     DrawScreenGrid(window);
     snake.LoadTextures();
@@ -32,7 +32,7 @@ int main()
         Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if (event.type == Event::Closed) 
             {
                 window.close();
             }
