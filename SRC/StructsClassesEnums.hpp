@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -57,12 +58,12 @@ struct GameTime
 {
     Clock ClockForMovement;
     Clock ClockForAnimationOfSnakeHeadLeaving;
-    Time FixedTimeForNextFrameInSnakeHeadLeaving; 
+    Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(15625); // 15625
     Time FixedTimeForNextMovement = microseconds(250000);
     Time LastTimeForMovement = seconds(0.0f);
     Time LastTimeForAnimationOfSnakeHeadLeaving = seconds(0);
-    Time NextMovementTime = seconds(0);
-    Time NextAnimationTimeForSnakeHeadLeaving = seconds(0);
+    Time NextMovementTime = microseconds(250000);
+    Time NextAnimationTimeForSnakeHeadLeaving = microseconds(15625);
 
     GameTime ()
     {
@@ -70,13 +71,12 @@ struct GameTime
         ClockForMovement.restart();
     }
 
-    bool HasXMiliscondsPassed (Time& LastChecked, Clock& clock, Time& NextMovementTime) 
+    bool HasXMiliscondsPassed (Clock& clock, Time& NextTriggerTime, Time& Interval)
     {
         Time TimeNow = clock.getElapsedTime();
-        if (NextMovementTime.asMicroseconds() <= TimeNow.asMicroseconds())
+        if (NextTriggerTime.asMicroseconds() <= TimeNow.asMicroseconds())
         {
-            LastChecked = NextMovementTime;
-            clock.restart();
+            NextTriggerTime += sf::microseconds(Interval.asMicroseconds());
             return true;
         }
         return false;
@@ -87,7 +87,7 @@ struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
     bool HasSnakeHeadEnteringTextureLoded  = false;
-    short CurrentTextureIndex = 0;
+    short CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
     short CurrentSnakelenth = 1;
     short CurrentDirectionSnakeIsGoing = 0;
     /*
@@ -105,7 +105,8 @@ struct Snake
     {
         ProtoTypeSnake.setSize(Vector2f(32,32));
         ProtoTypeSnake.setFillColor(Color(72, 118, 236));
-        ProtoTypeSnake.setPosition(Vector2f(0, 0));
+        ProtoTypeSnake.setPosition(Vector2f(16, 16));
+        ProtoTypeSnake.setOrigin(Vector2f(16, 16));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -158,7 +159,7 @@ struct Snake
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-32.png",
             }; // ./Assets/Animation/Snake-Head-Entering-Box
 
-            for (short i; i < 32; i++) 
+            for (short i = 0; i < 32; i++) 
             {
                 if (!SnakeTextureOfSnakeHeadEntering[i].loadFromFile(SpriteLocation[i])) 
                 {
@@ -201,7 +202,7 @@ struct Snake
             Texture TempTexture;
             short CurrentTextureLodedNumber = 0;
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if (!SnakeTextureOfSnakeHeadLeaving[i].loadFromFile(SpriteLocation[i]))
                 {
@@ -225,96 +226,21 @@ struct Snake
         LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
     }
 
-    void ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites (GameTime gameTime)
+    void ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites (GameTime& gameTime)
     {
-        if (gameTime.HasXMiliscondsPassed(gameTime.LastTimeForAnimationOfSnakeHeadLeaving , gameTime.ClockForAnimationOfSnakeHeadLeaving, gameTime.NextAnimationTimeForSnakeHeadLeaving))
+        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForAnimationOfSnakeHeadLeaving, gameTime.NextAnimationTimeForSnakeHeadLeaving, gameTime.FixedTimeForNextFrameInSnakeHeadLeaving)) 
         {
-            switch (CurrentTextureIndex)
+            if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 15) 
             {
-                case 0:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(1));
-                    CurrentTextureIndex++;
-                    break;
-                
-                case 1:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(2));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 2:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(3));
-                    CurrentTextureIndex++;
-                    break;
-                
-                case 3:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(4));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 4:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(4));
-                    CurrentTextureIndex++;
-                    break;
-                
-                case 5:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(6));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 6:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(7));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 7:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(8));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 8:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(9));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 9:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(10));
-                    CurrentTextureIndex++;
-                    break;
-                
-                case 10:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(11));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 11:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(12));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 12:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(13));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 13:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(14));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 14:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(15));
-                    CurrentTextureIndex++;
-                    break;
-
-                case 15:
-                    ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(0));
-                    CurrentTextureIndex = 0;
-                    break;
-        
-                default:
-                    break;
+                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
+            }
+            else 
+            {
+                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
+                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation++;
             }
         }
+
     }
 
     void FixSnakeRotation ()
@@ -342,7 +268,7 @@ struct Snake
         }
     }
 
-    void MoveSnake (Event& event, Snake& snake, GameTime gameTime)
+    void MoveSnake (Event& event, Snake& snake, GameTime& gameTime)
     {
         Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
         Vector2f Pos = PrivousPos;
@@ -367,14 +293,14 @@ struct Snake
             break;
         }
 
-        if (Pos.x >= 640) Pos.x = 608;
-        if (Pos.x < 0)    Pos.x = 0;
-        if (Pos.y >= 640) Pos.y = 608;
-        if (Pos.y < 0)    Pos.y = 0;
+        if (Pos.x >= 640) Pos.x = 608 + 16;
+        if (Pos.x < 0)    Pos.x = 16;
+        if (Pos.y >= 640) Pos.y = 608 + 16;
+        if (Pos.y < 0)    Pos.y = 16;
 
         snake.ProtoTypeSnake.setPosition(Pos);
 
-        if (!gameTime.HasXMiliscondsPassed(gameTime.LastTimeForMovement, gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement))
+        if (!gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.NextMovementTime, gameTime.FixedTimeForNextMovement))
         {
             snake.ProtoTypeSnake.setPosition(PrivousPos);
         }
