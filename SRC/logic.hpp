@@ -20,27 +20,4 @@ bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
         }
     }
     return false;
-}
-
-short DirectionChanger (Event& event, short CurrentDirection)
-{
-    if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
-    {
-        CurrentDirection = 1;
-    }
-    if (IsKeyPressed(event, Keyboard::A) || IsKeyPressed(event, Keyboard::Left))
-    {
-        CurrentDirection = 2;
-    }
-    if (IsKeyPressed(event, Keyboard::S) || IsKeyPressed(event, Keyboard::Down))
-    {
-        CurrentDirection = 3;
-    }
-    if (IsKeyPressed(event, Keyboard::D) || IsKeyPressed(event, Keyboard::Right))
-    {
-        CurrentDirection = 0;
-    }
-    return CurrentDirection;
-}
-
- 
+} 
