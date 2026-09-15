@@ -268,6 +268,39 @@ struct Snake
         }
     }
 
+    short DirectionChanger (Event& event, short CurrentDirection)
+    {
+        if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
+        {
+            if (CurrentDirection != 3) 
+            {
+                CurrentDirection = 1;
+            }
+        }
+        else if (IsKeyPressed(event, Keyboard::A) || IsKeyPressed(event, Keyboard::Left))
+        {
+            if (CurrentDirection != 0) 
+            {
+                CurrentDirection = 2;
+            }
+        }
+        else if (IsKeyPressed(event, Keyboard::S) || IsKeyPressed(event, Keyboard::Down))
+        {
+            if (CurrentDirection != 1) 
+            {
+                CurrentDirection = 3;
+            }
+        }
+        else if (IsKeyPressed(event, Keyboard::D) || IsKeyPressed(event, Keyboard::Right))
+        {
+            if (CurrentDirection != 2) 
+            {
+                CurrentDirection = 0;
+            }
+        }
+        return CurrentDirection;
+    }
+
     void MoveSnake (Event& event, Snake& snake, GameTime& gameTime)
     {
         Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
