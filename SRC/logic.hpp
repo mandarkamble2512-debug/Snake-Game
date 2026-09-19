@@ -10,14 +10,17 @@ using sf::Time;
 using sf::milliseconds;
 using std::cout;
 
-bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
+namespace Input 
 {
-    if (event.type == Event::KeyPressed)
+    bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
     {
-        if (Keyboard::isKeyPressed(TargetKey))
+        if (event.type == Event::KeyPressed)
         {
-            return true;
+            if (Keyboard::isKeyPressed(TargetKey))
+            {
+                return true;
+            }
         }
-    }
-    return false;
-} 
+        return false;
+    } 
+}

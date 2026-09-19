@@ -14,10 +14,9 @@ void GameLoop(RenderWindow& window, Event& event, Snake& snake, bool& Is250MiliS
 {
     DrawScreenGrid(window);
     snake.LoadTextures();
-    snake.MoveSnake(event, snake, gameTime);
-    snake.ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites(gameTime);
+    snake.MoveSnake(event, gameTime);
+    snake.PlayAnimation(gameTime);
     snake.DrawSnake(window);
-    // window.draw(snake.ProtoTypeSnake); 
 }
 
 int main()
