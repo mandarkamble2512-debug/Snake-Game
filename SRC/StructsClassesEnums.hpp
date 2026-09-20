@@ -12,7 +12,6 @@
 #include <array>
 #include "logic.hpp"
 
-using Input::IsKeyPressed;
 using sf::RenderWindow;
 using sf::RectangleShape;
 using sf::Vector2f;
@@ -71,13 +70,12 @@ struct GameTime
     Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(15625); // 15625
     Time FixedTimeForNextMovement = microseconds(250000);
 
-    Time NextMovementTime = microseconds(250000);
-    Time NextAnimationTimeForSnakeHeadLeaving = microseconds(15625);
-    Time NextAnimationTimeForSnakeHeadEntering = microseconds(7812);
+    Time& NextMovementTime = FixedTimeForNextMovement;
+    Time& NextAnimationTimeForSnakeHeadLeaving = FixedTimeForNextFrameInSnakeHeadLeaving;
+    Time& NextAnimationTimeForSnakeHeadEntering = FixedTimeForNextFrameInSnakeHeadEntering;
 
     Time TimeNow;
     Time OldTimeNow;
-    Time DeltaTime;
     
     GameTime ()
     {
@@ -90,17 +88,16 @@ struct GameTime
         TimeNow = clock.getElapsedTime();
         if (NextTriggerTime.asMicroseconds() <= TimeNow.asMicroseconds())
         {
-            NextTriggerTime += sf::microseconds(Interval.asMicroseconds());
+            // NextTriggerTime += microseconds(Interval.asMicroseconds());
             if (TimeNow != microseconds(0)) 
             {
                 OldTimeNow = TimeNow;
             }
+            clock.restart();
             return true;
         }
         return false;
     }
-
-    void deltaTime () {DeltaTime = TimeNow - OldTimeNow;}
 };
 
 struct Snake
@@ -118,17 +115,18 @@ struct Snake
     3 denotes towards Y
     */
     AnimationState StateOfAnimation = AnimationState::SnakeHeadEntering;
-    RectangleShape snake;
+    RectangleShape SnakeHead;
+    RectangleShape SnakeTail;
     array<RectangleShape, 396> SnakeBody;
     array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
     array<Texture, 34> SnakeTextureOfSnakeHeadEntering;
 
     Snake ()
     {
-        snake.setSize(Vector2f(32,32));
-        snake.setFillColor(Color(72, 118, 236));
-        snake.setPosition(Vector2f(16, 16));
-        snake.setOrigin(Vector2f(16, 16));
+        SnakeHead.setSize(Vector2f(32,32));
+        SnakeHead.setFillColor(Color(72, 118, 236));
+        SnakeHead.setPosition(Vector2f(16, 16));
+        SnakeHead.setOrigin(Vector2f(16, 16));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -138,7 +136,7 @@ struct Snake
         //     ProtoTypeSnake.setPosition(pos);
         //     window.draw(ProtoTypeSnake);
         // }    
-        window.draw(snake);
+        window.draw(SnakeHead);
     }
 
     void LoadTextureFromDiskOfSnakeHeadEnteringaAnimation ()
@@ -256,12 +254,10 @@ struct Snake
             {
                 CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
                 StateOfAnimation = AnimationState::SnakeHeadLeaving;
-                gameTime.deltaTime();
-                cout << "Changed to Leaving" << gameTime.DeltaTime.asMicroseconds() << "\n";
             }
             else 
             {
-                snake.setTexture(&SnakeTextureOfSnakeHeadEntering.at(CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation));
+                SnakeHead.setTexture(&SnakeTextureOfSnakeHeadEntering.at(CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation));
                 CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation++;
             }
         }
@@ -271,22 +267,20 @@ struct Snake
     {
         if (gameTime.HasXMiliscondsPassed(gameTime.ClockForAnimationOfSnakeHeadLeaving, gameTime.NextAnimationTimeForSnakeHeadLeaving, gameTime.FixedTimeForNextFrameInSnakeHeadLeaving)) 
         {
-            if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 15) 
+            if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 16) 
             {
                 CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
                 StateOfAnimation = AnimationState::SnakeHeadEntering;
-                gameTime.deltaTime();
-                cout << "Changed to entering" << gameTime.DeltaTime.asMicroseconds() << "\n";
             }
             else 
             {
-                snake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
+                SnakeHead.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
                 CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation++;
             }
         }
     }
 
-    void PlayAnimation (GameTime& gameTime)
+    void PlayAnimationForSnakeHead (GameTime& gameTime)
     {
         if (StateOfAnimation == AnimationState::SnakeHeadEntering) 
         {
@@ -303,19 +297,19 @@ struct Snake
         switch (CurrentDirectionSnakeIsGoing)
         {
         case 0:
-            snake.setRotation(-90);
+            SnakeHead.setRotation(-90);
             break;
         
         case 1:
-            snake.setRotation(180);
+            SnakeHead.setRotation(180);
             break;
         
         case 2:
-            snake.setRotation(-270);
+            SnakeHead.setRotation(-270);
             break;
 
         case 3:
-            snake.setRotation(0);
+            SnakeHead.setRotation(0);
             break;
 
         default:
@@ -323,7 +317,7 @@ struct Snake
         }
     }
 
-    short DirectionChanger (Event& event, short CurrentDirection)
+    short DirectionChanger (Event& event, short& CurrentDirection, GameTime& gameTime)
     {
         if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
         {
@@ -358,41 +352,40 @@ struct Snake
 
     void MoveSnake (Event& event, GameTime& gameTime)
     {
-        Vector2f PrivousPos = snake.getPosition();
-        Vector2f Pos = PrivousPos;
-        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing);
-
-        switch (CurrentDirectionSnakeIsGoing)
+        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
+        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.NextMovementTime, gameTime.FixedTimeForNextMovement)) 
         {
-        case 0:
-            Pos.x += 32;
-            break;
-        
-        case 1:
-            Pos.y -= 32;
-            break;
+            Vector2f PrivousPos = SnakeHead.getPosition();
+            Vector2f Pos = PrivousPos;
 
-        case 2:
-            Pos.x -= 32;
-            break;
+            switch (CurrentDirectionSnakeIsGoing)
+            {
+            case 0:
+                Pos.x += 32;
+                break;
+            
+            case 1:
+                Pos.y -= 32;
+                break;
 
-        case 3:
-            Pos.y += 32;
-            break;
+            case 2:
+                Pos.x -= 32;
+                break;
+
+            case 3:
+                Pos.y += 32;
+                break;
+            }
+
+            if (Pos.x >= 640) Pos.x = 608 + 16;
+            if (Pos.x < 0)    Pos.x = 16;
+            if (Pos.y >= 640) Pos.y = 608 + 16;
+            if (Pos.y < 0)    Pos.y = 16;
+
+            SnakeHead.setPosition(Pos);
+            FixSnakeRotation();
         }
 
-        if (Pos.x >= 640) Pos.x = 608 + 16;
-        if (Pos.x < 0)    Pos.x = 16;
-        if (Pos.y >= 640) Pos.y = 608 + 16;
-        if (Pos.y < 0)    Pos.y = 16;
-
-        snake.setPosition(Pos);
-
-        if (!gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.NextMovementTime, gameTime.FixedTimeForNextMovement))
-        {
-            snake.setPosition(PrivousPos);
-        }
-        FixSnakeRotation();
     }
 };
 

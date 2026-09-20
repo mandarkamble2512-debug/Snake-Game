@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 
 using sf::Vector2f;
@@ -10,17 +12,5 @@ using sf::Time;
 using sf::milliseconds;
 using std::cout;
 
-namespace Input 
-{
-    bool IsKeyPressed (Event& event, Keyboard::Key TargetKey)
-    {
-        if (event.type == Event::KeyPressed)
-        {
-            if (Keyboard::isKeyPressed(TargetKey))
-            {
-                return true;
-            }
-        }
-        return false;
-    } 
-}
+inline bool IsKeyPressed (Event& event, Keyboard::Key TargetKey) {return (event.type == Event::KeyPressed) && Keyboard::isKeyPressed(TargetKey);} 
+
