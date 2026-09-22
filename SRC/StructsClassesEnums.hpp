@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -100,10 +101,12 @@ struct GameTime
     }
 };
 
+
 struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
-    bool HasSnakeHeadEnteringTextureLoded  = false;
+    bool HasSnakeHeadEnteringTextureLoaded  = false;
+    bool HasSnakeFoodTextureLoaded = false;
     short CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
     short CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
     short CurrentSnakelenth = 1;
@@ -117,6 +120,8 @@ struct Snake
     AnimationState StateOfAnimation = AnimationState::SnakeHeadEntering;
     RectangleShape SnakeHead;
     RectangleShape SnakeTail;
+    RectangleShape SnakeFood;
+    Texture SnakeFoodTexture;
     array<RectangleShape, 396> SnakeBody;
     array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
     array<Texture, 34> SnakeTextureOfSnakeHeadEntering;
@@ -127,6 +132,11 @@ struct Snake
         SnakeHead.setFillColor(Color(72, 118, 236));
         SnakeHead.setPosition(Vector2f(16, 16));
         SnakeHead.setOrigin(Vector2f(16, 16));
+
+        SnakeTail.setSize(Vector2f(32, 32));
+        SnakeTail.setFillColor(Color(72, 118, 236));
+        SnakeTail.setOrigin(16, 16);
+        SnakeTail.setPosition(Vector2f(0, 0));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -137,11 +147,32 @@ struct Snake
         //     window.draw(ProtoTypeSnake);
         // }    
         window.draw(SnakeHead);
+        window.draw(SnakeTail);
+    }
+
+    void LoadTextureFromDiskOfSnakeFood ()
+    {
+        if (!HasSnakeFoodTextureLoaded) 
+        {
+            if (!HasSnakeFoodTextureLoaded)
+            {
+                if (!SnakeFoodTexture.loadFromFile("./Assets/Animation/Heart/pixil-frame-0.png"))
+                {
+                    cout << "Snake Food Texture Could Not Be Loaded\n";
+                }
+                else 
+                {
+                    cout << "Snake Food Texture Loaded\n";
+                    SnakeFood.setTexture(&SnakeFoodTexture);
+                    HasSnakeFoodTextureLoaded = true;
+                }
+            }
+        }
     }
 
     void LoadTextureFromDiskOfSnakeHeadEnteringaAnimation ()
     {
-        if (!HasSnakeHeadEnteringTextureLoded)
+        if (!HasSnakeHeadEnteringTextureLoaded)
         {
             string SpriteLocation[32] = 
             {
@@ -191,7 +222,7 @@ struct Snake
                     cout << SpriteLocation[i] << " Is loaded properly \n";
                 }
             }
-            HasSnakeHeadEnteringTextureLoded = true;
+            HasSnakeHeadEnteringTextureLoaded = true;
         }
         return;
     }
@@ -244,6 +275,7 @@ struct Snake
     {
         LoadTextureFromDiskOfSnakeHeadEnteringaAnimation();
         LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
+        LoadTextureFromDiskOfSnakeFood();
     }
 
     void ChangeTextureOfSnakeFromSnakeHeadEnteringBoxSprites (GameTime& gameTime)
@@ -350,7 +382,7 @@ struct Snake
         return CurrentDirection;
     }
 
-    void MoveSnake (Event& event, GameTime& gameTime)
+    void MoveSnakeHead (Event& event, GameTime& gameTime)
     {
         CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
         if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.NextMovementTime, gameTime.FixedTimeForNextMovement)) 
@@ -383,6 +415,7 @@ struct Snake
             if (Pos.y < 0)    Pos.y = 16;
 
             SnakeHead.setPosition(Pos);
+            SnakeTail.setPosition(PrivousPos);
             FixSnakeRotation();
         }
 

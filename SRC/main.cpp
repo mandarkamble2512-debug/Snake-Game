@@ -14,7 +14,7 @@ void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTi
 {
     DrawScreenGrid(window);
     snake.LoadTextures();
-    snake.MoveSnake(event, gameTime);
+    snake.MoveSnakeHead(event, gameTime);
     snake.PlayAnimationForSnakeHead(gameTime);
     snake.DrawSnake(window);
 }
