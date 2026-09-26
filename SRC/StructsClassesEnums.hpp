@@ -32,12 +32,6 @@ using std::filesystem::exists;
 using std::filesystem::is_directory;
 using std::filesystem::directory_iterator;
 
-enum class AnimationState
-{
-    SnakeHeadLeaving,
-    SnakeHeadEntering
-};
-
 struct LightGreenSqure
 {
     RectangleShape GreenSqure;
@@ -117,7 +111,6 @@ struct Snake
     2 denotes towards -X
     3 denotes towards Y
     */
-    AnimationState StateOfAnimation = AnimationState::SnakeHeadEntering;
     RectangleShape SnakeHead;
     RectangleShape SnakeTail;
     RectangleShape SnakeFood;
@@ -285,7 +278,6 @@ struct Snake
             if (CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation >= 32) 
             {
                 CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
-                StateOfAnimation = AnimationState::SnakeHeadLeaving;
             }
             else 
             {
@@ -302,11 +294,10 @@ struct Snake
             if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 16) 
             {
                 CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
-                StateOfAnimation = AnimationState::SnakeHeadEntering;
             }
             else 
             {
-                SnakeHead.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
+                SnakeTail.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
                 CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation++;
             }
         }
@@ -314,14 +305,8 @@ struct Snake
 
     void PlayAnimationForSnakeHead (GameTime& gameTime)
     {
-        if (StateOfAnimation == AnimationState::SnakeHeadEntering) 
-        {
             ChangeTextureOfSnakeFromSnakeHeadEnteringBoxSprites(gameTime);
-        }
-        else if (StateOfAnimation == AnimationState::SnakeHeadLeaving) 
-        {
             ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites(gameTime);
-        }
     }
 
     void FixSnakeRotation ()
@@ -330,18 +315,22 @@ struct Snake
         {
         case 0:
             SnakeHead.setRotation(-90);
+            SnakeTail.setRotation(-90);
             break;
         
         case 1:
             SnakeHead.setRotation(180);
+            SnakeTail.setRotation(180);
             break;
         
         case 2:
             SnakeHead.setRotation(-270);
+            SnakeTail.setRotation(-270);
             break;
 
         case 3:
             SnakeHead.setRotation(0);
+            SnakeTail.setRotation(0);
             break;
 
         default:
@@ -415,7 +404,10 @@ struct Snake
             if (Pos.y < 0)    Pos.y = 16;
 
             SnakeHead.setPosition(Pos);
-            SnakeTail.setPosition(PrivousPos);
+            if (Pos != PrivousPos) 
+            {
+                SnakeTail.setPosition(PrivousPos);
+            }
             FixSnakeRotation();
         }
 
