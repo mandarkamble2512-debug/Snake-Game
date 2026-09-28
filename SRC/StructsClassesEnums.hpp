@@ -61,8 +61,8 @@ struct GameTime
     Clock ClockForAnimationOfSnakeHeadLeaving;
     Clock ClockForAnimtaionOfSnakeHeadEntering;
 
-    Time FixedTimeForNextFrameInSnakeHeadEntering = microseconds(7812); // 7812.5
-    Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(15625); // 15625
+    Time FixedTimeForNextFrameInSnakeHeadEntering = microseconds(7575); // 7812.5
+    Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(7575); // 15625
     Time FixedTimeForNextMovement = microseconds(250000);
 
     Time TimeNow;
@@ -85,7 +85,6 @@ struct GameTime
             {
                 OldTimeNow = TimeNow;
             }
-            clock.restart();
             return true;
         }
         return false;
@@ -133,7 +132,7 @@ struct Snake
         SnakeTail.setSize(Vector2f(32, 32));
         SnakeTail.setFillColor(Color(72, 118, 236));
         SnakeTail.setOrigin(16, 16);
-        SnakeTail.setPosition(Vector2f(0, 0));
+        SnakeTail.setPosition(Vector2f(-16, -16));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -208,7 +207,7 @@ struct Snake
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-32.png",
             }; // ./Assets/Animation/Snake-Head-Entering-Box
 
-            for (short i = 0; i < 32; i++) 
+            for (short i = 0; i < 33; i++) 
             {
                 if (!SnakeTextureOfSnakeHeadEntering[i].loadFromFile(SpriteLocation[i])) 
                 {
@@ -276,36 +275,20 @@ struct Snake
         LoadTextureFromDiskOfSnakeFood();
     }
 
-    void ChangeTextureOfSnakeFromSnakeHeadEnteringBoxSprites (GameTime& gameTime)
-    {
-        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForAnimtaionOfSnakeHeadEntering, gameTime.FixedTimeForNextFrameInSnakeHeadEntering)) 
-        {
-            if (CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation >= 32) 
-            {
-                CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
-            }
-            SnakeHead.setTexture(&SnakeTextureOfSnakeHeadEntering.at(CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation));
-            CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation++;
-        }
-    }
-
-    void ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites (GameTime& gameTime)
-    {
-        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForAnimationOfSnakeHeadLeaving, gameTime.FixedTimeForNextFrameInSnakeHeadLeaving)) 
-        {
-            if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 16) 
-            {
-                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
-            }
-            SnakeTail.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
-            CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation++;
-        }
-    }
-
     void PlayAnimationForSnakeHead (GameTime& gameTime)
     {
-        ChangeTextureOfSnakeFromSnakeHeadEnteringBoxSprites(gameTime);
-        ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites(gameTime);
+        long long elapsedUs = gameTime.ClockForAnimtaionOfSnakeHeadEntering.getElapsedTime().asMicroseconds();
+        long long frameUs   = gameTime.FixedTimeForNextFrameInSnakeHeadEntering.asMicroseconds();
+
+        short frame = static_cast<short>(elapsedUs / frameUs);
+
+        short enteringFrame = frame;
+        if (enteringFrame > 32) enteringFrame = 32;
+        SnakeHead.setTexture(&SnakeTextureOfSnakeHeadEntering.at(enteringFrame));
+
+        short leavingFrame = frame;
+        if (leavingFrame > 15) leavingFrame = 15;
+        SnakeTail.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(leavingFrame));
     }
 
     void FixSnakeRotation ()
@@ -371,55 +354,36 @@ struct Snake
     }
 
     void MoveSnakeHead (Event& event, GameTime& gameTime)
+{
+    CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
+    if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement)) 
     {
-        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
-        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement)) 
+        Vector2f PrivousPos = SnakeHead.getPosition();
+        Vector2f Pos = PrivousPos;
+
+        switch (CurrentDirectionSnakeIsGoing)
         {
-            Vector2f PrivousPos = SnakeHead.getPosition();
-            Vector2f Pos = PrivousPos;
-
-            switch (CurrentDirectionSnakeIsGoing)
-            {
-            case 0:
-                Pos.x += 32;
-                break;
-            
-            case 1:
-                Pos.y -= 32;
-                break;
-
-            case 2:
-                Pos.x -= 32;
-                break;
-
-            case 3:
-                Pos.y += 32;
-                break;
-            }
-
-            if (Pos.x >= 640) Pos.x = 608 + 16;
-            if (Pos.x < 0)    Pos.x = 16;
-            if (Pos.y >= 640) Pos.y = 608 + 16;
-            if (Pos.y < 0)    Pos.y = 16;
-
-            SnakeHead.setPosition(Pos);
-            if (Pos != PrivousPos) 
-            {
-                SnakeTail.setPosition(PrivousPos);
-                SnakeTail.setPosition(PrivousPos);
-                SnakeTail.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(0));
-                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 1;
-
-                SnakeHead.setTexture(&SnakeTextureOfSnakeHeadEntering.at(0));
-                CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 1;
-                gameTime.RestartAllClocks();
-            }
-            FixSnakeRotation();
-            gameTime.RestartAllClocks();
-            CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
-            CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
+        case 0: Pos.x += 32; break;
+        case 1: Pos.y -= 32; break;
+        case 2: Pos.x -= 32; break;
+        case 3: Pos.y += 32; break;
         }
 
+        if (Pos.x >= 640) Pos.x = 608 + 16;
+        if (Pos.x < 0)    Pos.x = 16;
+        if (Pos.y >= 640) Pos.y = 608 + 16;
+        if (Pos.y < 0)    Pos.y = 16;
+
+        SnakeHead.setPosition(Pos);
+        if (Pos != PrivousPos) 
+        {
+            SnakeTail.setPosition(PrivousPos);
+        }
+        FixSnakeRotation();
+
+        // The ONLY restart point for these two clocks — locked to the same instant as movement.
+        gameTime.RestartAllClocks();
     }
+}
 };
 
