@@ -1,5 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -9,7 +12,6 @@
 #include <filesystem>
 #include <array>
 #include "logic.hpp"
-
 
 using sf::RenderWindow;
 using sf::RectangleShape;
@@ -45,7 +47,6 @@ struct LightGreenSqure
 struct DarkGreenSqure
 {
     RectangleShape GreenSqure;
-
     DarkGreenSqure (Vector2f Pos)
     {
         GreenSqure.setSize(Vector2f(32, 32));
@@ -58,36 +59,53 @@ struct GameTime
 {
     Clock ClockForMovement;
     Clock ClockForAnimationOfSnakeHeadLeaving;
-    Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(15625); // 15625
-    Time FixedTimeForNextMovement = microseconds(250000);
-    Time LastTimeForMovement = seconds(0.0f);
-    Time LastTimeForAnimationOfSnakeHeadLeaving = seconds(0);
-    Time NextMovementTime = microseconds(250000);
-    Time NextAnimationTimeForSnakeHeadLeaving = microseconds(15625);
+    Clock ClockForAnimtaionOfSnakeHeadEntering;
 
+    Time FixedTimeForNextFrameInSnakeHeadEntering = microseconds(7575); // 7812.5
+    Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(7575); // 15625
+    Time FixedTimeForNextMovement = microseconds(250000);
+
+    Time TimeNow;
+    Time OldTimeNow;
+    
     GameTime ()
     {
+        ClockForAnimtaionOfSnakeHeadEntering.restart();
         ClockForAnimationOfSnakeHeadLeaving.restart();
         ClockForMovement.restart();
     }
 
-    bool HasXMiliscondsPassed (Clock& clock, Time& NextTriggerTime, Time& Interval)
+    bool HasXMiliscondsPassed (Clock& clock, Time& NextTriggerTime)
     {
-        Time TimeNow = clock.getElapsedTime();
+        TimeNow = clock.getElapsedTime();
         if (NextTriggerTime.asMicroseconds() <= TimeNow.asMicroseconds())
         {
-            NextTriggerTime += sf::microseconds(Interval.asMicroseconds());
+            // NextTriggerTime += microseconds(Interval.asMicroseconds());
+            if (TimeNow != microseconds(0)) 
+            {
+                OldTimeNow = TimeNow;
+            }
             return true;
         }
         return false;
     }
+
+    void RestartAllClocks ()
+    {
+        ClockForAnimtaionOfSnakeHeadEntering.restart();
+        ClockForAnimationOfSnakeHeadLeaving.restart();
+        ClockForMovement.restart();
+    }
 };
+
 
 struct Snake
 {
     bool HasSnakeHeadLeavingTexturesLoaded = false;
-    bool HasSnakeHeadEnteringTextureLoded  = false;
+    bool HasSnakeHeadEnteringTextureLoaded  = false;
+    bool HasSnakeFoodTextureLoaded = false;
     short CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
+    short CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
     short CurrentSnakelenth = 1;
     short CurrentDirectionSnakeIsGoing = 0;
     /*
@@ -96,17 +114,25 @@ struct Snake
     2 denotes towards -X
     3 denotes towards Y
     */
-    RectangleShape ProtoTypeSnake;
-    vector<Vector2f> CurrentSnakeFormation;
+    RectangleShape SnakeHead;
+    RectangleShape SnakeTail;
+    RectangleShape SnakeFood;
+    Texture SnakeFoodTexture;
+    array<RectangleShape, 396> SnakeBody;
     array<Texture, 16> SnakeTextureOfSnakeHeadLeaving;
     array<Texture, 34> SnakeTextureOfSnakeHeadEntering;
 
     Snake ()
     {
-        ProtoTypeSnake.setSize(Vector2f(32,32));
-        ProtoTypeSnake.setFillColor(Color(72, 118, 236));
-        ProtoTypeSnake.setPosition(Vector2f(16, 16));
-        ProtoTypeSnake.setOrigin(Vector2f(16, 16));
+        SnakeHead.setSize(Vector2f(32,32));
+        SnakeHead.setFillColor(Color(72, 118, 236));
+        SnakeHead.setPosition(Vector2f(16, 16));
+        SnakeHead.setOrigin(Vector2f(16, 16));
+
+        SnakeTail.setSize(Vector2f(32, 32));
+        SnakeTail.setFillColor(Color(72, 118, 236));
+        SnakeTail.setOrigin(16, 16);
+        SnakeTail.setPosition(Vector2f(-16, -16));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -116,17 +142,39 @@ struct Snake
         //     ProtoTypeSnake.setPosition(pos);
         //     window.draw(ProtoTypeSnake);
         // }    
-        window.draw(ProtoTypeSnake);
+        window.draw(SnakeHead);
+        window.draw(SnakeTail);
+    }
+
+    void LoadTextureFromDiskOfSnakeFood ()
+    {
+        if (!HasSnakeFoodTextureLoaded) 
+        {
+            if (!HasSnakeFoodTextureLoaded)
+            {
+                if (!SnakeFoodTexture.loadFromFile("./Assets/Animation/Heart/pixil-frame-0.png"))
+                {
+                    cout << "Snake Food Texture Could Not Be Loaded\n";
+                }
+                else 
+                {
+                    cout << "Snake Food Texture Loaded\n";
+                    SnakeFood.setTexture(&SnakeFoodTexture);
+                    HasSnakeFoodTextureLoaded = true;
+                }
+            }
+        }
     }
 
     void LoadTextureFromDiskOfSnakeHeadEnteringaAnimation ()
     {
-        if (!HasSnakeHeadEnteringTextureLoded)
+        if (!HasSnakeHeadEnteringTextureLoaded)
         {
-            string SpriteLocation[32] = 
+            string SpriteLocation[33] = 
             {
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-0.png",
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-1.png",
+                "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-2.png",
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-3.png",
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-4.png",
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-5.png",
@@ -159,7 +207,7 @@ struct Snake
                 "./Assets/Animation/Snake-Head-Entering-Box/pixil-frame-32.png",
             }; // ./Assets/Animation/Snake-Head-Entering-Box
 
-            for (short i = 0; i < 32; i++) 
+            for (short i = 0; i < 33; i++) 
             {
                 if (!SnakeTextureOfSnakeHeadEntering[i].loadFromFile(SpriteLocation[i])) 
                 {
@@ -171,7 +219,7 @@ struct Snake
                     cout << SpriteLocation[i] << " Is loaded properly \n";
                 }
             }
-            HasSnakeHeadEnteringTextureLoded = true;
+            HasSnakeHeadEnteringTextureLoaded = true;
         }
         return;
     }
@@ -224,23 +272,23 @@ struct Snake
     {
         LoadTextureFromDiskOfSnakeHeadEnteringaAnimation();
         LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
+        LoadTextureFromDiskOfSnakeFood();
     }
 
-    void ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites (GameTime& gameTime)
+    void PlayAnimationForSnakeHead (GameTime& gameTime)
     {
-        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForAnimationOfSnakeHeadLeaving, gameTime.NextAnimationTimeForSnakeHeadLeaving, gameTime.FixedTimeForNextFrameInSnakeHeadLeaving)) 
-        {
-            if (CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation >= 15) 
-            {
-                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
-            }
-            else 
-            {
-                ProtoTypeSnake.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation));
-                CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation++;
-            }
-        }
+        long long elapsedUs = gameTime.ClockForAnimtaionOfSnakeHeadEntering.getElapsedTime().asMicroseconds();
+        long long frameUs   = gameTime.FixedTimeForNextFrameInSnakeHeadEntering.asMicroseconds();
 
+        short frame = static_cast<short>(elapsedUs / frameUs);
+
+        short enteringFrame = frame;
+        if (enteringFrame > 32) enteringFrame = 32;
+        SnakeHead.setTexture(&SnakeTextureOfSnakeHeadEntering.at(enteringFrame));
+
+        short leavingFrame = frame;
+        if (leavingFrame > 15) leavingFrame = 15;
+        SnakeTail.setTexture(&SnakeTextureOfSnakeHeadLeaving.at(leavingFrame));
     }
 
     void FixSnakeRotation ()
@@ -248,19 +296,23 @@ struct Snake
         switch (CurrentDirectionSnakeIsGoing)
         {
         case 0:
-            ProtoTypeSnake.setRotation(-90);
+            SnakeHead.setRotation(-90);
+            SnakeTail.setRotation(-90);
             break;
         
         case 1:
-            ProtoTypeSnake.setRotation(180);
+            SnakeHead.setRotation(180);
+            SnakeTail.setRotation(180);
             break;
         
         case 2:
-            ProtoTypeSnake.setRotation(-270);
+            SnakeHead.setRotation(-270);
+            SnakeTail.setRotation(-270);
             break;
 
         case 3:
-            ProtoTypeSnake.setRotation(0);
+            SnakeHead.setRotation(0);
+            SnakeTail.setRotation(0);
             break;
 
         default:
@@ -268,7 +320,7 @@ struct Snake
         }
     }
 
-    short DirectionChanger (Event& event, short CurrentDirection)
+    short DirectionChanger (Event& event, short& CurrentDirection, GameTime& gameTime)
     {
         if (IsKeyPressed(event ,Keyboard::W) || IsKeyPressed(event, Keyboard::Up))
         {
@@ -301,29 +353,20 @@ struct Snake
         return CurrentDirection;
     }
 
-    void MoveSnake (Event& event, Snake& snake, GameTime& gameTime)
+    void MoveSnakeHead (Event& event, GameTime& gameTime)
+{
+    CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
+    if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement)) 
     {
-        Vector2f PrivousPos = snake.ProtoTypeSnake.getPosition();
+        Vector2f PrivousPos = SnakeHead.getPosition();
         Vector2f Pos = PrivousPos;
-        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing);
 
         switch (CurrentDirectionSnakeIsGoing)
         {
-        case 0:
-            Pos.x += 32;
-            break;
-        
-        case 1:
-            Pos.y -= 32;
-            break;
-
-        case 2:
-            Pos.x -= 32;
-            break;
-
-        case 3:
-            Pos.y += 32;
-            break;
+        case 0: Pos.x += 32; break;
+        case 1: Pos.y -= 32; break;
+        case 2: Pos.x -= 32; break;
+        case 3: Pos.y += 32; break;
         }
 
         if (Pos.x >= 640) Pos.x = 608 + 16;
@@ -331,13 +374,16 @@ struct Snake
         if (Pos.y >= 640) Pos.y = 608 + 16;
         if (Pos.y < 0)    Pos.y = 16;
 
-        snake.ProtoTypeSnake.setPosition(Pos);
-
-        if (!gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.NextMovementTime, gameTime.FixedTimeForNextMovement))
+        SnakeHead.setPosition(Pos);
+        if (Pos != PrivousPos) 
         {
-            snake.ProtoTypeSnake.setPosition(PrivousPos);
+            SnakeTail.setPosition(PrivousPos);
         }
         FixSnakeRotation();
+
+        // The ONLY restart point for these two clocks — locked to the same instant as movement.
+        gameTime.RestartAllClocks();
     }
+}
 };
 

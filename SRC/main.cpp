@@ -10,14 +10,13 @@ using sf::Event;
 using sf::Color;
 
 
-void GameLoop(RenderWindow& window, Event& event, Snake& snake, bool& Is250MiliSecondPassed, GameTime& gameTime)
+void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTime)
 {
     DrawScreenGrid(window);
     snake.LoadTextures();
-    snake.MoveSnake(event, snake, gameTime);
-    snake.ChangeTextureOfSnakeFromSnakeHeadLeavingBoxSprites(gameTime);
+    snake.MoveSnakeHead(event, gameTime);
+    snake.PlayAnimationForSnakeHead(gameTime);
     snake.DrawSnake(window);
-    // window.draw(snake.ProtoTypeSnake); 
 }
 
 int main()
@@ -25,8 +24,6 @@ int main()
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
     GameTime gameTime;
-    bool Is250MiliSecondPassed = 0;
-
     while (window.isOpen())
     {
         Event event;
@@ -38,7 +35,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event, snake, Is250MiliSecondPassed, gameTime);
+        GameLoop(window, event, snake, gameTime);
         window.display();
     }
     return 0;
