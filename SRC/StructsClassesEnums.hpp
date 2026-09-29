@@ -31,6 +31,7 @@ using std::move;
 using std::filesystem::exists;
 using std::filesystem::is_directory;
 using std::filesystem::directory_iterator;
+using std::rand;
 
 struct LightGreenSqure
 {
@@ -104,6 +105,7 @@ struct Snake
     bool HasSnakeHeadLeavingTexturesLoaded = false;
     bool HasSnakeHeadEnteringTextureLoaded  = false;
     bool HasSnakeFoodTextureLoaded = false;
+    bool HasSnakeFoodEaten = true;
     short CurrentTextureIndexOfSnakeHeadLeavingBoxAnimation = 0;
     short CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
     short CurrentSnakelenth = 1;
@@ -133,6 +135,11 @@ struct Snake
         SnakeTail.setFillColor(Color(72, 118, 236));
         SnakeTail.setOrigin(16, 16);
         SnakeTail.setPosition(Vector2f(-16, -16));
+
+        SnakeFood.setSize(Vector2f(32, 32));
+        SnakeFood.setFillColor(Color(255, 0, 0));
+        SnakeFood.setOrigin(Vector2f(16, 16));
+        SnakeFood.setPosition(Vector2f(16, 16));
     }
     
     void DrawSnake(RenderWindow& window)
@@ -142,6 +149,7 @@ struct Snake
         //     ProtoTypeSnake.setPosition(pos);
         //     window.draw(ProtoTypeSnake);
         // }    
+        window.draw(SnakeFood);
         window.draw(SnakeHead);
         window.draw(SnakeTail);
     }
@@ -354,36 +362,56 @@ struct Snake
     }
 
     void MoveSnakeHead (Event& event, GameTime& gameTime)
-{
-    CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
-    if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement)) 
     {
-        Vector2f PrivousPos = SnakeHead.getPosition();
-        Vector2f Pos = PrivousPos;
-
-        switch (CurrentDirectionSnakeIsGoing)
+        CurrentDirectionSnakeIsGoing = DirectionChanger(event, CurrentDirectionSnakeIsGoing, gameTime);
+        if (gameTime.HasXMiliscondsPassed(gameTime.ClockForMovement, gameTime.FixedTimeForNextMovement)) 
         {
-        case 0: Pos.x += 32; break;
-        case 1: Pos.y -= 32; break;
-        case 2: Pos.x -= 32; break;
-        case 3: Pos.y += 32; break;
+            Vector2f PrivousPos = SnakeHead.getPosition();
+            Vector2f Pos = PrivousPos;
+
+            switch (CurrentDirectionSnakeIsGoing)
+            {
+            case 0: Pos.x += 32; break;
+            case 1: Pos.y -= 32; break;
+            case 2: Pos.x -= 32; break;
+            case 3: Pos.y += 32; break;
+            }
+
+            if (Pos.x >= 640) Pos.x = 608 + 16;
+            if (Pos.x < 0)    Pos.x = 16;
+            if (Pos.y >= 640) Pos.y = 608 + 16;
+            if (Pos.y < 0)    Pos.y = 16;
+
+            SnakeHead.setPosition(Pos);
+            if (Pos != PrivousPos) 
+            {
+                SnakeTail.setPosition(PrivousPos);
+            }
+            FixSnakeRotation();
+
+            // The ONLY restart point for these two clocks — locked to the same instant as movement.
+            gameTime.RestartAllClocks();
         }
-
-        if (Pos.x >= 640) Pos.x = 608 + 16;
-        if (Pos.x < 0)    Pos.x = 16;
-        if (Pos.y >= 640) Pos.y = 608 + 16;
-        if (Pos.y < 0)    Pos.y = 16;
-
-        SnakeHead.setPosition(Pos);
-        if (Pos != PrivousPos) 
-        {
-            SnakeTail.setPosition(PrivousPos);
-        }
-        FixSnakeRotation();
-
-        // The ONLY restart point for these two clocks — locked to the same instant as movement.
-        gameTime.RestartAllClocks();
     }
-}
+
+    void SpawnSnakeFood ()
+    {
+        if (HasSnakeFoodEaten) 
+        {
+            short RandomXCord = rand() % 21;
+            short RandYCord = rand() % 21;
+            cout << RandomXCord << " " << RandYCord << "\n";
+            SnakeFood.setPosition(Vector2f((RandomXCord * 32) + 16, (RandYCord * 32) + 16));
+            HasSnakeFoodEaten = false;
+        }
+    }
+
+    void HasFoodEaten ()
+    {
+        if (SnakeTail.getPosition() == SnakeFood.getPosition())
+        {
+            HasSnakeFoodEaten = true;
+        }
+    }
 };
 

@@ -3,24 +3,31 @@
 #include "RenderObjects.hpp"
 #include "StructsClassesEnums.hpp"
 #include "logic.hpp"
+#include <cstdlib>
+#include <ctime>
 
 using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Event;
 using sf::Color;
+using std::srand;
+using std::time;
 
 
 void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTime)
 {
     DrawScreenGrid(window);
     snake.LoadTextures();
+    snake.SpawnSnakeFood();
     snake.MoveSnakeHead(event, gameTime);
+    snake.HasFoodEaten();
     snake.PlayAnimationForSnakeHead(gameTime);
     snake.DrawSnake(window);
 }
 
 int main()
 {
+    srand(time(NULL));
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
     GameTime gameTime;
