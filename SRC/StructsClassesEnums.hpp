@@ -110,6 +110,7 @@ struct Snake
     short CurrentTextureIndexOfSnakeHeadEnteringBoxAnimation = 0;
     short CurrentSnakelenth = 1;
     short CurrentDirectionSnakeIsGoing = 0;
+    short CurrentScore = 0; 
     /*
     0 denotes towards X
     1 denotes towards -Y
@@ -401,6 +402,7 @@ struct Snake
             short RandomXCord = rand() % 21;
             short RandYCord = rand() % 21;
             cout << RandomXCord << " " << RandYCord << "\n";
+            cout << CurrentScore << "\n";
             SnakeFood.setPosition(Vector2f((RandomXCord * 32) + 16, (RandYCord * 32) + 16));
             HasSnakeFoodEaten = false;
         }
@@ -411,6 +413,7 @@ struct Snake
         if (SnakeTail.getPosition() == SnakeFood.getPosition())
         {
             HasSnakeFoodEaten = true;
+            CurrentScore++;
         }
     }
 };
