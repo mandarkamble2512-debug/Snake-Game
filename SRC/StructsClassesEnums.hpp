@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
@@ -18,6 +19,7 @@ using sf::RectangleShape;
 using sf::Vector2f;
 using sf::Color;
 using sf::Texture;
+using sf::Text;
 using sf::Event;
 using sf::Clock;
 using sf::Time;
@@ -32,6 +34,7 @@ using std::filesystem::exists;
 using std::filesystem::is_directory;
 using std::filesystem::directory_iterator;
 using std::rand;
+using std::to_string;
 
 struct LightGreenSqure
 {
@@ -61,10 +64,12 @@ struct GameTime
     Clock ClockForMovement;
     Clock ClockForAnimationOfSnakeHeadLeaving;
     Clock ClockForAnimtaionOfSnakeHeadEntering;
+    Clock ClockForScoreBoard;
 
     Time FixedTimeForNextFrameInSnakeHeadEntering = microseconds(7575); // 7812.5
     Time FixedTimeForNextFrameInSnakeHeadLeaving = microseconds(7575); // 15625
     Time FixedTimeForNextMovement = microseconds(250000);
+    Time FixedTimeForScoreBoardToMove = microseconds(1000000);
 
     Time TimeNow;
     Time OldTimeNow;
@@ -98,7 +103,6 @@ struct GameTime
         ClockForMovement.restart();
     }
 };
-
 
 struct Snake
 {
@@ -277,7 +281,7 @@ struct Snake
         return;
     }
 
-    void LoadTextures ()
+    void LoadTexturesOfSnake ()
     {
         LoadTextureFromDiskOfSnakeHeadEnteringaAnimation();
         LoadTextureFromDiskOfSnakeHeadLeavingAnimation();
@@ -418,3 +422,21 @@ struct Snake
     }
 };
 
+struct UI 
+{
+    RectangleShape ScoreBoard;
+    Text Score;
+
+    UI () 
+    {
+        ScoreBoard.setSize(Vector2f(96, 32));
+        ScoreBoard.setOrigin(Vector2f(48, 16));
+        ScoreBoard.setPosition(Vector2f(48, -16));
+    }
+
+    void ChangeScore (Snake& snake)
+    {
+        Score.setString(to_string(snake.CurrentScore));
+    }
+
+};

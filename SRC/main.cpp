@@ -17,7 +17,7 @@ using std::time;
 void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTime)
 {
     DrawScreenGrid(window);
-    snake.LoadTextures();
+    snake.LoadTexturesOfSnake();
     snake.SpawnSnakeFood();
     snake.MoveSnakeHead(event, gameTime);
     snake.HasFoodEaten();
