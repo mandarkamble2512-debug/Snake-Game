@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -407,8 +408,11 @@ struct Snake
             short RandYCord = rand() % 21;
             cout << RandomXCord << " " << RandYCord << "\n";
             cout << CurrentScore << "\n";
+            if (SnakeHead.getPosition() != Vector2f((RandomXCord * 32) + 16, (RandYCord * 32) + 16) && SnakeTail.getPosition() != Vector2f((RandomXCord * 32) + 16, (RandYCord * 32) + 16)) 
+            {
             SnakeFood.setPosition(Vector2f((RandomXCord * 32) + 16, (RandYCord * 32) + 16));
             HasSnakeFoodEaten = false;
+            }
         }
     }
 
@@ -424,14 +428,19 @@ struct Snake
 
 struct UI 
 {
+    bool HasScoreBoardTextureLoaded = false;
     RectangleShape ScoreBoard;
+    Texture ScoreBoardTexture;
     Text Score;
+    Clock ClockForScoreBoard;
 
     UI () 
     {
         ScoreBoard.setSize(Vector2f(96, 32));
         ScoreBoard.setOrigin(Vector2f(48, 16));
         ScoreBoard.setPosition(Vector2f(48, -16));
+
+        ClockForScoreBoard.restart();
     }
 
     void ChangeScore (Snake& snake)
@@ -439,4 +448,42 @@ struct UI
         Score.setString(to_string(snake.CurrentScore));
     }
 
+    void RefreshClock ()
+    {
+        if (ClockForScoreBoard.getElapsedTime() >= seconds(1)) 
+        {
+            ClockForScoreBoard.restart();
+        }
+    }
+
+    void MoveScoreBoardInTheScreenAndDrawThem (RenderWindow& window, Snake& snake)
+    {
+        if (snake.SnakeHead.getPosition().x != 0) 
+        {
+            ScoreBoard.setPosition(Vector2f(48, 16));
+            Score.setPosition(Vector2f(0, 0));
+
+            window.draw(ScoreBoard);
+            window.draw(Score);
+        }
+    }
+
+    void LoadTextureFromDiskOfScoreBoard ()
+    {
+        if (!HasScoreBoardTextureLoaded) 
+        {
+            if (!ScoreBoardTexture.loadFromFile("./Assets/UI/ScoreBoard.png")) 
+            {
+                cout << "Texture from ./Assets/UI/ScoreBoard.png could not be loaded properly\n";
+                
+            }
+            else 
+            {
+                HasScoreBoardTextureLoaded = true;
+                cout << "Texture from ./Assets/UI/ScoreBoard.png is loaded properly\n";
+                ScoreBoard.setTexture(&ScoreBoardTexture);
+            }
+        }
+        return;
+    }
 };

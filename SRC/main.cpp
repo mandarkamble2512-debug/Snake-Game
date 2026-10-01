@@ -14,7 +14,7 @@ using std::srand;
 using std::time;
 
 
-void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTime)
+void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTime, UI ui)
 {
     DrawScreenGrid(window);
     snake.LoadTexturesOfSnake();
@@ -23,6 +23,11 @@ void GameLoop(RenderWindow& window, Event& event, Snake& snake, GameTime& gameTi
     snake.HasFoodEaten();
     snake.PlayAnimationForSnakeHead(gameTime);
     snake.DrawSnake(window);
+
+    ui.LoadTextureFromDiskOfScoreBoard();
+    ui.ChangeScore(snake);
+    ui.MoveScoreBoardInTheScreenAndDrawThem(window, snake);
+    ui.RefreshClock();
 }
 
 int main()
@@ -30,6 +35,7 @@ int main()
     srand(time(NULL));
     RenderWindow window(VideoMode(640, 640), "Swift Snake");
     Snake snake;
+    UI ui;
     GameTime gameTime;
     while (window.isOpen())
     {
@@ -42,7 +48,7 @@ int main()
             }
         }
         window.clear(Color::Black);
-        GameLoop(window, event, snake, gameTime);
+        GameLoop(window, event, snake, gameTime, ui);
         window.display();
     }
     return 0;
